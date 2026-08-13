@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inteligência de Preços — Vortioxetina</title>
+<style>
+:root{
+  --bg:#f3f4f6;--card:#fff;--ink:#252a34;--muted:#707784;--line:#e3e6eb;
+  --purple:#5b3fd0;--purple2:#8b78e3;--blue:#3f6fa5;--orange:#d97706;
+  --green:#2f855a;--red:#c2413b;--gray:#9ba2ad;--nav:#30343b;--soft:#fafafa
+}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+header{background:#fafafa;border-bottom:1px solid var(--line);padding:18px 28px;position:sticky;top:0;z-index:20}
+.head{display:flex;justify-content:space-between;gap:16px;align-items:flex-end}h1{font-size:23px;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:4px}
+.tabs{display:flex;gap:6px;margin-top:14px}.tabs button{border:0;background:transparent;padding:9px 12px;border-radius:8px;font-weight:800;color:#5f6672;cursor:pointer}.tabs button.active{background:var(--nav);color:#fff}
+main{max-width:1520px;margin:auto;padding:22px 28px 48px}.view{display:none}.view.active{display:block}.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px}
+.filters{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;grid-template-columns:1fr 1fr auto 1fr;gap:9px;align-items:end}
+.field label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#7a818d;font-weight:900;margin-bottom:5px}
+select,button.action{width:100%;height:39px;border:1px solid #dce0e6;border-radius:8px;background:#fff;padding:0 10px;font-size:12px;color:#252a34}
+.swap{width:auto!important;padding:0 14px!important;font-weight:850;cursor:pointer;background:#fafafa!important}
+.context{font-size:11px;color:#68707d;margin:9px 1px 10px}
+.scoreboard{display:grid;grid-template-columns:1fr .9fr 1fr;gap:10px;align-items:stretch;margin-bottom:10px}
+.fighter{position:relative;overflow:hidden}.fighter:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--blue)}.fighter.lund:before{background:var(--purple)}.fighter.lund2:before{background:var(--purple2)}
+.tag{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:#777f8c;font-weight:900}.fighter h2{font-size:21px;margin:6px 0 2px}.meta{font-size:10px;color:var(--muted)}.price{font-size:31px;font-weight:950;margin-top:16px}.unit{font-size:11px;color:#6f7681;margin-top:4px}
+.centerScore{display:flex;flex-direction:column;justify-content:center;text-align:center;background:#fffaf3;border:1px solid #f0d7b3;border-radius:14px;padding:15px}.gapMain{font-size:38px;font-weight:950;color:var(--orange);letter-spacing:-.03em}.gapSub{font-size:12px;color:#6a707b;margin-top:4px}.gapLine{font-size:11px;color:#565d68;margin-top:8px}.notice{font-size:10px;color:#8a5b19;background:#fff4df;border:1px solid #f0dab3;border-radius:7px;padding:7px 8px;margin-top:10px}
+.summary{background:#fbfaff;border:1px solid #ded8fb;border-radius:12px;padding:13px 15px;font-size:13px;line-height:1.48;margin-bottom:10px}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:10px}.kpi .lab{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:#767e8b;font-weight:900}.kpi .val{font-size:21px;font-weight:900;margin-top:6px}.kpi .foot{font-size:10px;color:var(--muted);margin-top:3px}
+.grid2{display:grid;grid-template-columns:1.55fr .75fr;gap:10px;margin-bottom:10px}.card h3{font-size:14px;margin:0}.desc{font-size:10px;color:var(--muted);margin:4px 0 10px}
+.netrow{display:grid;grid-template-columns:125px 1fr 78px 78px 64px;gap:9px;align-items:center;padding:8px 0;border-bottom:1px solid #f0f2f4;font-size:11px}.netrow:last-child{border-bottom:0}
+.dumb{height:3px;background:#e9ecf0;position:relative}.dumb .a,.dumb .b{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%)}.dumb .a{background:var(--purple)}.dumb .b{background:var(--blue)}.dumb .connector{position:absolute;top:1px;height:1px;background:#b9c0c9}
+.gap{font-weight:900;color:var(--orange)}.missing{font-size:10px;color:#a05b00}
+.insight{font-size:11px;line-height:1.4;padding:9px 10px;background:#fbfcfd;border-left:3px solid var(--blue);border-radius:7px;margin-bottom:7px}.insight.op{border-left-color:var(--green)}.insight.att{border-left-color:var(--orange)}
+.promo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}.promoBlock{padding:2px 0}.promoTitle{display:flex;justify-content:space-between;font-size:11px;margin-bottom:6px}.bar{height:9px;background:#eef1f4;border-radius:99px;overflow:hidden}.bar span{display:block;height:100%;border-radius:99px}.bar.a span{background:var(--purple)}.bar.b span{background:var(--blue)}.promoText{font-size:11px;margin-top:9px;color:#555d68}
+.coverage{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.coverage .big{font-size:23px;font-weight:900}.coverage .small{font-size:10px;color:var(--muted);margin-top:3px}
+.catalogHeader{display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer}.catalogHeader button{width:auto;height:31px;padding:0 10px;cursor:pointer}
+.catalogBody{display:none;margin-top:12px}.catalogBody.open{display:block}.tablewrap{overflow:auto;max-height:360px}table{width:100%;border-collapse:collapse;font-size:10px}th,td{padding:8px 10px;border-bottom:1px solid #f0f2f4;text-align:left;white-space:nowrap}th{position:sticky;top:0;background:#fafbfc;font-size:9px;text-transform:uppercase;color:#747c88}
+.catalogAction{display:flex;gap:5px}.catalogAction button{width:auto;height:27px;border:1px solid #dde1e7;background:#fff;border-radius:6px;font-size:9px;font-weight:800;cursor:pointer}
+.history{background:#fafbfc;border:1px dashed #cfd4dc;border-radius:10px;padding:12px;font-size:11px;color:#666e7a}
+.small{font-size:10px;color:var(--muted)}
+@media(max-width:1100px){.filters{grid-template-columns:1fr 1fr}.scoreboard,.grid2{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(3,1fr)}.coverage{grid-template-columns:1fr}.netrow{grid-template-columns:110px 1fr 70px 70px 58px}}
+@media(max-width:650px){header,main{padding-left:13px;padding-right:13px}.head{flex-direction:column;align-items:flex-start}.filters,.kpis,.promo{grid-template-columns:1fr}.netrow{grid-template-columns:1fr}.dumb{height:14px}.swap{width:100%!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="head"><div><h1>Inteligência de Preços — Vortioxetina</h1><div class="sub">Comparação executiva de preço, desconto e consistência competitiva</div></div><div class="sub" id="today"></div></div>
+  <div class="tabs"><button data-v="exec">Visão Executiva</button><button class="active" data-v="duel">Duelo de Preços</button></div>
+</header>
+<main>
+<section id="exec" class="view">
+  <div class="card"><h3>Visão Executiva</h3><div class="desc">A primeira aba permanece preservada nesta versão do protótipo. A evolução implementada aqui está concentrada no Duelo de Preços.</div></div>
+</section>
+
+<section id="duel" class="view active">
+  <div class="filters">
+    <div class="field"><label>Produto A</label><select id="selA"></select></div>
+    <div class="field"><label>Produto B</label><select id="selB"></select></div>
+    <button id="swap" class="action swap">⇄ Inverter produtos</button>
+    <div class="field"><label>Cidade</label><select id="city"><option>Vitória/ES</option><option>São Paulo/SP</option><option>Rio de Janeiro/RJ</option><option>Belo Horizonte/MG</option><option>Curitiba/PR</option></select></div>
+  </div>
+  <div id="context" class="context"></div>
+
+  <div class="scoreboard">
+    <div id="fighterA" class="card fighter"><div class="tag">Produto A</div><h2 id="aName"></h2><div id="aMeta" class="meta"></div><div id="aPrice" class="price"></div><div id="aUnit" class="unit"></div></div>
+    <div class="centerScore"><div class="tag">Gap percentual</div><div id="gapMain" class="gapMain"></div><div id="gapDirection" class="gapSub"></div><div id="gapBox" class="gapLine"></div><div id="qtyNotice" class="notice" style="display:none"></div></div>
+    <div id="fighterB" class="card fighter"><div class="tag">Produto B</div><h2 id="bName"></h2><div id="bMeta" class="meta"></div><div id="bPrice" class="price"></div><div id="bUnit" class="unit"></div></div>
+  </div>
+
+  <div id="summary" class="summary"></div>
+
+  <div class="kpis">
+    <div class="card kpi"><div class="lab">Gap caixa</div><div id="kBox" class="val"></div></div>
+    <div class="card kpi"><div class="lab">Gap percentual</div><div id="kPct" class="val"></div></div>
+    <div class="card kpi"><div class="lab">Gap unitário</div><div id="kUnit" class="val"></div><div class="foot">por comprimido</div></div>
+    <div class="card kpi"><div class="lab">Gap desconto</div><div id="kDisc" class="val"></div></div>
+    <div class="card kpi"><div class="lab">Redes comparáveis</div><div id="kNets" class="val"></div><div id="kNetsFoot" class="foot"></div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card"><h3>Duelo por rede</h3><div class="desc">Ordenado pelo maior gap percentual. Dumbbell representa a distância entre os preços médios.</div><div id="networkRows"></div></div>
+    <div class="card"><h3>Insights do duelo</h3><div class="desc">Leitura automática do posicionamento</div><div id="insights"></div></div>
+  </div>
+
+  <div class="promo">
+    <div class="card"><h3>Comparação promocional</h3><div class="desc">Desconto médio aplicado aos dois produtos</div>
+      <div class="promoBlock"><div class="promoTitle"><strong id="promoAName"></strong><span id="promoAVal"></span></div><div class="bar a"><span id="promoABar"></span></div></div>
+      <div class="promoBlock" style="margin-top:10px"><div class="promoTitle"><strong id="promoBName"></strong><span id="promoBVal"></span></div><div class="bar b"><span id="promoBBar"></span></div></div>
+      <div id="promoText" class="promoText"></div>
+    </div>
+    <div class="card"><h3>Cobertura comparável</h3><div class="desc">Observação separada por produto e interseção das redes</div>
+      <div class="coverage"><div><div id="covA" class="big"></div><div id="covATxt" class="small"></div></div><div><div id="covB" class="big"></div><div id="covBTxt" class="small"></div></div><div><div id="covBoth" class="big"></div><div id="covBothTxt" class="small"></div></div></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:10px"><h3>Evolução do gap competitivo</h3><div class="desc">Estrutura preparada para acompanhamento temporal</div><div id="history" class="history"></div></div>
+
+  <div class="card">
+    <div class="catalogHeader" id="catToggle"><div><h3>▸ Catálogo de apresentações</h3><div class="desc" style="margin-bottom:0">Consulta e atalho para seleção no duelo</div></div><button class="action">Expandir</button></div>
+    <div id="catBody" class="catalogBody"><div class="tablewrap"><table><thead><tr><th>Produto</th><th>Fabricante</th><th>Classe</th><th>Apresentação</th><th>Ações</th></tr></thead><tbody id="catTable"></tbody></table></div></div>
+  </div>
+</section>
+</main>
+
+<script>
+const CATALOG=[{"name": "Brintellix", "maker": "Lundbeck", "cls": "Lundbeck", "packs": [[5, 30], [10, 30], [10, 60], [15, 30], [15, 60], [20, 30]]}, {"name": "Vurtuoso", "maker": "Lundbeck", "cls": "Lundbeck", "packs": [[5, 30], [10, 30], [10, 60], [15, 30], [15, 60], [20, 30], [20, 60]]}, {"name": "Vognus", "maker": "EMS", "cls": "Similar", "packs": [[5, 10], [5, 30], [5, 60], [10, 10], [10, 30], [10, 60]]}, {"name": "VOD", "maker": "Eurofarma", "cls": "Similar", "packs": [[5, 30], [10, 30], [15, 30], [20, 30]]}, {"name": "Voextor", "maker": "Libbs", "cls": "Similar", "packs": [[5, 15], [5, 30], [10, 15], [10, 30], [10, 60], [15, 15], [15, 30], [15, 60], [20, 15], [20, 30], [20, 60]]}, {"name": "Vorpro", "maker": "Germed", "cls": "Similar", "packs": [[5, 10], [5, 30], [5, 60], [10, 10], [10, 30], [10, 60]]}, {"name": "Vorxe", "maker": "Supera", "cls": "Similar", "packs": [[5, 10], [5, 30], [5, 60], [10, 10], [10, 30], [15, 30], [20, 30]]}, {"name": "Evortia", "maker": "Cosmed / Mantecorp", "cls": "Similar", "packs": [[5, 10], [5, 30], [5, 60], [10, 10], [10, 30], [10, 60], [15, 10], [15, 60], [20, 10], [20, 60]]}, {"name": "Vortioxetina Althaia", "maker": "Althaia", "cls": "Genérico", "packs": [[5, 30], [10, 30], [10, 60], [15, 30], [15, 60], [20, 30], [20, 60]]}, {"name": "Vortioxetina Neo Química", "maker": "Neo Química", "cls": "Genérico", "packs": [[5, 30], [5, 60], [10, 30], [10, 60], [15, 30], [15, 60], [20, 30], [20, 60]]}, {"name": "Vortioxetina EMS", "maker": "EMS", "cls": "Genérico", "packs": [[5, 30], [10, 30], [10, 60]]}, {"name": "Vortioxetina Eurofarma", "maker": "Eurofarma", "cls": "Genérico", "packs": [[5, 30], [15, 30], [20, 30]]}];
+const NETS=["Panvel", "São João", "Venâncio", "Raia", "Drogasil", "Drogaria São Paulo", "Pacheco"];
+const CITIES=["Vitória/ES", "São Paulo/SP", "Rio de Janeiro/RJ", "Belo Horizonte/MG", "Curitiba/PR"];
+const money=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
+const $=id=>document.getElementById(id), fm=n=>money.format(n||0), avg=(a,k)=>a.length?a.reduce((s,x)=>s+x[k],0)/a.length:0, pct=n=>(n>=0?'+':'')+n.toFixed(1).replace('.',',')+'%';
+$('today').textContent='Protótipo • '+new Date().toLocaleDateString('pt-BR');
+function h(s){let x=0;for(let i=0;i<s.length;i++)x=(x*31+s.charCodeAt(i))>>>0;return x}
+function rnd(n){let x=Math.sin(n)*10000;return x-Math.floor(x)}
+let SKUS=[];CATALOG.forEach(p=>p.packs.forEach(q=>SKUS.push({name:p.name,maker:p.maker,cls:p.cls,mg:q[0],qty:q[1],id:p.name+'|'+q[0]+'|'+q[1]})));
+const F={'Brintellix':1.06,'Vurtuoso':1,'Vognus':.73,'VOD':.78,'Voextor':.81,'Vorpro':.70,'Vorxe':.76,'Evortia':.74,'Vortioxetina Althaia':.59,'Vortioxetina Neo Química':.56,'Vortioxetina EMS':.61,'Vortioxetina Eurofarma':.63};
+const base=s=>235*Math.pow(s.mg/10,.72)*Math.pow(s.qty/30,.88)*(F[s.name]||.8);
+function obs(s,n,c,d){
+  let z=h(s.id+n+c+d), list=base(s)*(1+(rnd(z)-.5)*.10)*(1+(90-d)*.0006), d0=s.cls==='Lundbeck'?.12:s.cls==='Similar'?.15:.19, disc=d0+rnd(z+17)*.085;
+  let observed=rnd(z+91)>.045;
+  return {date:new Date(Date.now()-d*86400000),sku:s,net:n,city:c,list,final:list*(1-disc),disc:disc*100,observed}
+}
+let DATA=[];for(const s of SKUS)for(const n of NETS)for(const c of CITIES)for(let d=0;d<90;d+=7)DATA.push(obs(s,n,c,d));
+const sku=id=>SKUS.find(s=>s.id===id), pl=s=>`${s.mg} mg · ${s.qty} cp`;
+
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===b.dataset.v))});
+
+function productColorClass(s,side){
+  if(s.cls==='Lundbeck') return s.name==='Brintellix'?'lund':'lund2';
+  return '';
+}
+function sortForCounterpart(baseSku, currentId){
+  return [...SKUS].filter(s=>s.id!==currentId).sort((a,b)=>{
+    let ae=(a.mg===baseSku.mg&&a.qty===baseSku.qty)?0:(a.mg===baseSku.mg?1:2);
+    let be=(b.mg===baseSku.mg&&b.qty===baseSku.qty)?0:(b.mg===baseSku.mg?1:2);
+    if(ae!==be)return ae-be;
+    if(a.cls!==b.cls){
+      const ord={'Lundbeck':0,'Similar':1,'Genérico':2};
+      return ord[a.cls]-ord[b.cls];
+    }
+    return a.name.localeCompare(b.name);
+  });
+}
+function fillSelect(el, list, selected){
+  el.innerHTML=list.map(s=>`<option value="${s.id}">${s.name} — ${pl(s)} (${s.cls})</option>`).join('');
+  if(selected && list.some(s=>s.id===selected))el.value=selected;
+}
+function reSortCounterpart(changedSide){
+  let A=sku($('selA').value), B=sku($('selB').value);
+  if(!A||!B)return;
+  if(changedSide==='A'){
+    let old=B.id, list=sortForCounterpart(A,A.id); fillSelect($('selB'),list,old);
+  }else{
+    let old=A.id, list=sortForCounterpart(B,B.id); fillSelect($('selA'),list,old);
+  }
+}
+function rowsFor(s){
+  return DATA.filter(r=>r.sku.id===s.id&&r.city===$('city').value&&r.observed);
+}
+function networkStats(A,B){
+  let ra=rowsFor(A),rb=rowsFor(B);
+  return NETS.map(n=>{
+    let a=ra.filter(r=>r.net===n),b=rb.filter(r=>r.net===n);
+    let ao=a.length>0,bo=b.length>0,pa=ao?avg(a,'final'):null,pb=bo?avg(b,'final'):null,da=ao?avg(a,'disc'):null,db=bo?avg(b,'disc'):null;
+    return {n,ao,bo,pa,pb,da,db,comparable:ao&&bo,gap:(ao&&bo)?(pa/pb-1)*100:null};
+  });
+}
+function meanComparable(stats,key){
+  let a=stats.filter(x=>x.comparable).map(x=>x[key]); return a.length?a.reduce((s,x)=>s+x,0)/a.length:0;
+}
+function render(){
+  let A=sku($('selA').value),B=sku($('selB').value); if(!A||!B)return;
+  if(A.id===B.id){
+    let list=sortForCounterpart(A,A.id); fillSelect($('selB'),list,list[0]?.id); B=sku($('selB').value);
+  }
+  $('context').textContent=`${A.name} · ${pl(A)}  ×  ${B.name} · ${pl(B)}  ·  ${$('city').value}`;
+
+  $('fighterA').className='card fighter '+productColorClass(A,'A');
+  $('fighterB').className='card fighter '+productColorClass(B,'B');
+  let stats=networkStats(A,B), comp=stats.filter(x=>x.comparable);
+  let pa=comp.length?comp.reduce((s,x)=>s+x.pa,0)/comp.length:0, pb=comp.length?comp.reduce((s,x)=>s+x.pb,0)/comp.length:0;
+  let da=comp.length?comp.reduce((s,x)=>s+x.da,0)/comp.length:0, db=comp.length?comp.reduce((s,x)=>s+x.db,0)/comp.length:0;
+  let ua=pa/A.qty,ub=pb/B.qty,gap=pb?(pa/pb-1)*100:0,boxDiff=pa-pb,unitDiff=ua-ub,discGap=da-db;
+
+  $('aName').textContent=A.name;$('aMeta').textContent=`${A.maker} · ${A.cls} · ${pl(A)}`;$('aPrice').textContent=fm(pa);$('aUnit').textContent=`${fm(ua)} / comprimido`;
+  $('bName').textContent=B.name;$('bMeta').textContent=`${B.maker} · ${B.cls} · ${pl(B)}`;$('bPrice').textContent=fm(pb);$('bUnit').textContent=`${fm(ub)} / comprimido`;
+  $('gapMain').textContent=pct(gap);$('gapDirection').textContent=`${A.name} está ${Math.abs(gap).toFixed(1).replace('.',',')}% ${gap>=0?'acima':'abaixo'} de ${B.name}`;
+  $('gapBox').innerHTML=`${boxDiff>=0?'+':''}${fm(boxDiff)} por caixa<br>${unitDiff>=0?'+':''}${fm(unitDiff)} por comprimido`;
+  let diffQty=A.qty!==B.qty;$('qtyNotice').style.display=diffQty?'block':'none';$('qtyNotice').textContent=diffQty?'Apresentações com quantidades diferentes — comparação normalizada por comprimido.':'';
+
+  $('kBox').textContent=(boxDiff>=0?'+':'')+fm(boxDiff);$('kPct').textContent=pct(gap);$('kUnit').textContent=(unitDiff>=0?'+':'')+fm(unitDiff)+'/cp';$('kDisc').textContent=(discGap>=0?'+':'')+discGap.toFixed(1).replace('.',',')+' p.p.';$('kNets').textContent=comp.length;$('kNetsFoot').textContent=`de ${NETS.length} analisadas`;
+
+  let gaps=comp.map(x=>x.gap), maxGap=Math.max(...gaps),minGap=Math.min(...gaps),spread=maxGap-minGap;
+  let maxRow=[...comp].sort((a,b)=>b.gap-a.gap)[0],minRow=[...comp].sort((a,b)=>a.gap-b.gap)[0];
+  let consistency=spread<3?'Gap consistente entre redes':spread<7?'Variação moderada entre redes':'Gap heterogêneo entre redes';
+  let bestA=[...comp].sort((a,b)=>a.pa-b.pa)[0],bestB=[...comp].sort((a,b)=>a.pb-b.pb)[0],discWinner=da>db?A.name:B.name;
+
+  $('summary').innerHTML=`<strong>${A.name}</strong> apresenta preço médio <strong>${Math.abs(gap).toFixed(1).replace('.',',')}% ${gap>=0?'superior':'inferior'}</strong> a <strong>${B.name}</strong> nas ${comp.length} redes comparáveis. O gap permanece entre <strong>${minGap.toFixed(1).replace('.',',')}%</strong> e <strong>${maxGap.toFixed(1).replace('.',',')}%</strong> entre as redes, indicando ${consistency.toLowerCase()}. ${discWinner} apresenta desconto médio ${Math.abs(discGap).toFixed(1).replace('.',',')} p.p. ${da>db?'superior':'inferior'}.`;
+
+  let prices=comp.flatMap(x=>[x.pa,x.pb]),pmin=Math.min(...prices),pmax=Math.max(...prices);
+  $('networkRows').innerHTML=[...stats].sort((a,b)=>{
+    if(a.comparable&&b.comparable)return b.gap-a.gap;
+    if(a.comparable)return -1;if(b.comparable)return 1;return a.n.localeCompare(b.n);
+  }).map(x=>{
+    if(!x.comparable){
+      let msg=!x.ao&&!x.bo?'Ambos não observados':!x.ao?`${A.name} não observado nesta rede`:`${B.name} não observado nesta rede`;
+      return `<div class="netrow"><strong>${x.n}</strong><div class="missing">${msg}</div><span>—</span><span>—</span><span>—</span></div>`;
+    }
+    let aPos=(x.pa-pmin)/(pmax-pmin||1)*100,bPos=(x.pb-pmin)/(pmax-pmin||1)*100,left=Math.min(aPos,bPos),width=Math.abs(aPos-bPos);
+    return `<div class="netrow"><strong>${x.n}</strong><div class="dumb"><span class="connector" style="left:${left}%;width:${width}%"></span><span class="a" style="left:${aPos}%"></span><span class="b" style="left:${bPos}%"></span></div><span>${fm(x.pa)}</span><span>${fm(x.pb)}</span><span class="gap">${pct(x.gap)}</span></div>`;
+  }).join('');
+
+  $('insights').innerHTML=`
+    <div class="insight att"><strong>Maior gap</strong><br>${maxRow.n} · ${pct(maxRow.gap)}</div>
+    <div class="insight"><strong>Menor gap</strong><br>${minRow.n} · ${pct(minRow.gap)}</div>
+    <div class="insight"><strong>Spread do gap</strong><br>${spread.toFixed(1).replace('.',',')} p.p.</div>
+    <div class="insight op"><strong>Menor preço de A</strong><br>${bestA.n} · ${fm(bestA.pa)}</div>
+    <div class="insight op"><strong>Menor preço de B</strong><br>${bestB.n} · ${fm(bestB.pb)}</div>
+    <div class="insight"><strong>Maior desconto médio</strong><br>${discWinner}</div>
+    <div class="insight"><strong>Leitura</strong><br>${consistency}</div>`;
+
+  $('promoAName').textContent=A.name;$('promoBName').textContent=B.name;$('promoAVal').textContent=da.toFixed(1).replace('.',',')+'%';$('promoBVal').textContent=db.toFixed(1).replace('.',',')+'%';
+  let dmax=Math.max(da,db,1);$('promoABar').style.width=(da/dmax*100)+'%';$('promoBBar').style.width=(db/dmax*100)+'%';
+  $('promoText').innerHTML=`<strong>${da>db?A.name:B.name}</strong> aplica ${Math.abs(discGap).toFixed(1).replace('.',',')} p.p. ${Math.max(da,db)===da?'mais':'mais'} desconto que ${da>db?B.name:A.name}.`;
+
+  let seenA=stats.filter(x=>x.ao).length,seenB=stats.filter(x=>x.bo).length,seenBoth=comp.length;
+  $('covA').textContent=seenA;$('covATxt').textContent=`redes com ${A.name}`;$('covB').textContent=seenB;$('covBTxt').textContent=`redes com ${B.name}`;$('covBoth').textContent=seenBoth;$('covBothTxt').textContent=`redes comparáveis de ${NETS.length}`;
+
+  let hist=[gap-1.5,gap-0.9,gap-0.4,gap].map(x=>x.toFixed(1).replace('.',',')+'%');
+  $('history').innerHTML=`Últimos períodos: <strong>${hist.join(' → ')}</strong><br><span class="small">Estrutura pronta para substituir esta simulação por histórico real de gap quando a base persistente estiver conectada.</span>`;
+}
+function fillA(selected){
+  let B=sku($('selB').value)||SKUS[0]; let list=sortForCounterpart(B,B.id); fillSelect($('selA'),list,selected);
+}
+function fillB(selected){
+  let A=sku($('selA').value)||SKUS[0]; let list=sortForCounterpart(A,A.id); fillSelect($('selB'),list,selected);
+}
+$('selA').onchange=()=>{reSortCounterpart('A');render()};
+$('selB').onchange=()=>{reSortCounterpart('B');render()};
+$('city').onchange=render;
+$('swap').onclick=()=>{let a=$('selA').value,b=$('selB').value;fillSelect($('selA'),sortForCounterpart(sku(b),b),b);fillSelect($('selB'),sortForCounterpart(sku(a),a),a);render()};
+
+$('catToggle').onclick=()=>{let open=$('catBody').classList.toggle('open');$('catToggle').querySelector('h3').textContent=(open?'▾':'▸')+' Catálogo de apresentações';$('catToggle').querySelector('button').textContent=open?'Recolher':'Expandir'};
+$('catTable').innerHTML=SKUS.map(s=>`<tr><td><strong>${s.name}</strong></td><td>${s.maker}</td><td>${s.cls}</td><td>${pl(s)}</td><td><div class="catalogAction"><button data-a="${s.id}">Comparar como A</button><button data-b="${s.id}">Comparar como B</button></div></td></tr>`).join('');
+document.querySelectorAll('[data-a]').forEach(b=>b.onclick=e=>{let id=e.target.dataset.a;if(id===$('selB').value){let alt=sortForCounterpart(sku(id),id)[0];fillSelect($('selB'),sortForCounterpart(sku(id),id),alt.id)}fillSelect($('selA'),sortForCounterpart(sku($('selB').value),$('selB').value),id);reSortCounterpart('A');render();window.scrollTo({top:0,behavior:'smooth'})});
+document.querySelectorAll('[data-b]').forEach(b=>b.onclick=e=>{let id=e.target.dataset.b;if(id===$('selA').value){let alt=sortForCounterpart(sku(id),id)[0];fillSelect($('selA'),sortForCounterpart(sku(id),id),alt.id)}fillSelect($('selB'),sortForCounterpart(sku($('selA').value),$('selA').value),id);reSortCounterpart('B');render();window.scrollTo({top:0,behavior:'smooth'})});
+
+let defA=SKUS.find(s=>s.name==='Vurtuoso'&&s.mg===10&&s.qty===30);
+let defB=SKUS.find(s=>s.name==='Voextor'&&s.mg===10&&s.qty===30);
+fillSelect($('selA'),SKUS,defA.id);fillSelect($('selB'),sortForCounterpart(defA,defA.id),defB.id);
+render();
+</script>
+</body></html>
