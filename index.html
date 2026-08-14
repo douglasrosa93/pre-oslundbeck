@@ -1,252 +1,416 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Inteligência de Preços — Vortioxetina</title>
-<style>
-:root{
-  --bg:#f3f4f6;--card:#fff;--ink:#252a34;--muted:#707784;--line:#e3e6eb;
-  --purple:#5b3fd0;--purple2:#8b78e3;--blue:#3f6fa5;--orange:#d97706;
-  --green:#2f855a;--red:#c2413b;--gray:#9ba2ad;--nav:#30343b;--soft:#fafafa
-}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
-header{background:#fafafa;border-bottom:1px solid var(--line);padding:18px 28px;position:sticky;top:0;z-index:20}
-.head{display:flex;justify-content:space-between;gap:16px;align-items:flex-end}h1{font-size:23px;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:4px}
-.tabs{display:flex;gap:6px;margin-top:14px}.tabs button{border:0;background:transparent;padding:9px 12px;border-radius:8px;font-weight:800;color:#5f6672;cursor:pointer}.tabs button.active{background:var(--nav);color:#fff}
-main{max-width:1520px;margin:auto;padding:22px 28px 48px}.view{display:none}.view.active{display:block}.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px}
-.filters{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;grid-template-columns:1fr 1fr auto 1fr;gap:9px;align-items:end}
-.field label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#7a818d;font-weight:900;margin-bottom:5px}
-select,button.action{width:100%;height:39px;border:1px solid #dce0e6;border-radius:8px;background:#fff;padding:0 10px;font-size:12px;color:#252a34}
-.swap{width:auto!important;padding:0 14px!important;font-weight:850;cursor:pointer;background:#fafafa!important}
-.context{font-size:11px;color:#68707d;margin:9px 1px 10px}
-.scoreboard{display:grid;grid-template-columns:1fr .9fr 1fr;gap:10px;align-items:stretch;margin-bottom:10px}
-.fighter{position:relative;overflow:hidden}.fighter:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--blue)}.fighter.lund:before{background:var(--purple)}.fighter.lund2:before{background:var(--purple2)}
-.tag{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:#777f8c;font-weight:900}.fighter h2{font-size:21px;margin:6px 0 2px}.meta{font-size:10px;color:var(--muted)}.price{font-size:31px;font-weight:950;margin-top:16px}.unit{font-size:11px;color:#6f7681;margin-top:4px}
-.centerScore{display:flex;flex-direction:column;justify-content:center;text-align:center;background:#fffaf3;border:1px solid #f0d7b3;border-radius:14px;padding:15px}.gapMain{font-size:38px;font-weight:950;color:var(--orange);letter-spacing:-.03em}.gapSub{font-size:12px;color:#6a707b;margin-top:4px}.gapLine{font-size:11px;color:#565d68;margin-top:8px}.notice{font-size:10px;color:#8a5b19;background:#fff4df;border:1px solid #f0dab3;border-radius:7px;padding:7px 8px;margin-top:10px}
-.summary{background:#fbfaff;border:1px solid #ded8fb;border-radius:12px;padding:13px 15px;font-size:13px;line-height:1.48;margin-bottom:10px}
-.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:10px}.kpi .lab{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:#767e8b;font-weight:900}.kpi .val{font-size:21px;font-weight:900;margin-top:6px}.kpi .foot{font-size:10px;color:var(--muted);margin-top:3px}
-.grid2{display:grid;grid-template-columns:1.55fr .75fr;gap:10px;margin-bottom:10px}.card h3{font-size:14px;margin:0}.desc{font-size:10px;color:var(--muted);margin:4px 0 10px}
-.netrow{display:grid;grid-template-columns:125px 1fr 78px 78px 64px;gap:9px;align-items:center;padding:8px 0;border-bottom:1px solid #f0f2f4;font-size:11px}.netrow:last-child{border-bottom:0}
-.dumb{height:3px;background:#e9ecf0;position:relative}.dumb .a,.dumb .b{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%)}.dumb .a{background:var(--purple)}.dumb .b{background:var(--blue)}.dumb .connector{position:absolute;top:1px;height:1px;background:#b9c0c9}
-.gap{font-weight:900;color:var(--orange)}.missing{font-size:10px;color:#a05b00}
-.insight{font-size:11px;line-height:1.4;padding:9px 10px;background:#fbfcfd;border-left:3px solid var(--blue);border-radius:7px;margin-bottom:7px}.insight.op{border-left-color:var(--green)}.insight.att{border-left-color:var(--orange)}
-.promo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}.promoBlock{padding:2px 0}.promoTitle{display:flex;justify-content:space-between;font-size:11px;margin-bottom:6px}.bar{height:9px;background:#eef1f4;border-radius:99px;overflow:hidden}.bar span{display:block;height:100%;border-radius:99px}.bar.a span{background:var(--purple)}.bar.b span{background:var(--blue)}.promoText{font-size:11px;margin-top:9px;color:#555d68}
-.coverage{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.coverage .big{font-size:23px;font-weight:900}.coverage .small{font-size:10px;color:var(--muted);margin-top:3px}
-.catalogHeader{display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer}.catalogHeader button{width:auto;height:31px;padding:0 10px;cursor:pointer}
-.catalogBody{display:none;margin-top:12px}.catalogBody.open{display:block}.tablewrap{overflow:auto;max-height:360px}table{width:100%;border-collapse:collapse;font-size:10px}th,td{padding:8px 10px;border-bottom:1px solid #f0f2f4;text-align:left;white-space:nowrap}th{position:sticky;top:0;background:#fafbfc;font-size:9px;text-transform:uppercase;color:#747c88}
-.catalogAction{display:flex;gap:5px}.catalogAction button{width:auto;height:27px;border:1px solid #dde1e7;background:#fff;border-radius:6px;font-size:9px;font-weight:800;cursor:pointer}
-.history{background:#fafbfc;border:1px dashed #cfd4dc;border-radius:10px;padding:12px;font-size:11px;color:#666e7a}
-.small{font-size:10px;color:var(--muted)}
-@media(max-width:1100px){.filters{grid-template-columns:1fr 1fr}.scoreboard,.grid2{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(3,1fr)}.coverage{grid-template-columns:1fr}.netrow{grid-template-columns:110px 1fr 70px 70px 58px}}
-@media(max-width:650px){header,main{padding-left:13px;padding-right:13px}.head{flex-direction:column;align-items:flex-start}.filters,.kpis,.promo{grid-template-columns:1fr}.netrow{grid-template-columns:1fr}.dumb{height:14px}.swap{width:100%!important}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#211746">
+  <meta name="description" content="Visão executiva e posicionamento competitivo de preços do portfólio Lundbeck.">
+  <title>Inteligência de Preços — Portfólio Lundbeck</title>
+  <style>
+    :root {
+      --ink:#202132; --muted:#686b79; --soft:#f4f3f0; --surface:#fff; --surface-2:#f9f8f6;
+      --line:#e5e2dc; --brand:#4d2780; --brand-dark:#211746; --brand-soft:#efe9f5;
+      --teal:#12736c; --teal-soft:#e5f3ef; --gold:#b77822; --gold-soft:#fbf1df;
+      --red:#b5474f; --red-soft:#fae9eb; --blue:#326b9d; --blue-soft:#e9f1f8;
+      --shadow:0 12px 32px rgba(33,23,70,.07); --radius:16px;
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--soft);color:var(--ink);font-family:Aptos,"Segoe UI",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+    button,select,input{font:inherit;color:inherit} button{cursor:pointer} button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid rgba(77,39,128,.24);outline-offset:2px}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .shell{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:246px;padding:24px 17px;background:var(--brand-dark);color:#fff;display:flex;flex-direction:column;z-index:50}
+    .brand{display:flex;align-items:center;gap:11px;padding:2px 8px 27px}.brand-mark{width:39px;height:39px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.26);border-radius:12px;background:rgba(255,255,255,.08);font-weight:900;font-size:12px}.brand strong{font-size:14px;display:block;line-height:1.15}.brand span{display:block;margin-top:5px;color:#bfb4d1;font-size:9px;text-transform:uppercase;letter-spacing:.1em}
+    .nav-label{padding:0 11px 8px;color:#8e80a7;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.12em}.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#cec6dc;border-radius:10px;padding:12px;text-align:left;font-size:12px;font-weight:750;display:flex;align-items:center;gap:11px}.nav button:hover{color:#fff;background:rgba(255,255,255,.07)}.nav button.active{background:#fff;color:var(--brand-dark);box-shadow:0 9px 21px rgba(0,0,0,.16)}.nav-icon{width:19px;text-align:center;font-size:15px}.sidebar-spacer{flex:1}
+    .mode-card{margin:18px 5px 0;padding:13px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.07);border-radius:13px}.mode-line{display:flex;align-items:center;gap:8px;font-size:10px;font-weight:850}.status-dot{width:7px;height:7px;border-radius:50%;background:#f0b45f;box-shadow:0 0 0 4px rgba(240,180,95,.12)}.mode-card p{margin:8px 0 0;color:#bfb5cf;font-size:9px;line-height:1.5}
+    .main{margin-left:246px;min-width:0}.topbar{position:sticky;top:0;z-index:40;min-height:78px;padding:13px 30px;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:18px}.heading h1{margin:0;font-size:18px;letter-spacing:-.025em}.heading p{margin:4px 0 0;color:var(--muted);font-size:10px}.top-actions{display:flex;gap:8px;align-items:center}.button,.select{min-height:38px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:0 12px;font-size:10px;font-weight:800}.button:hover{background:var(--surface-2);border-color:#cdc8d3}.button.primary{background:var(--brand);border-color:var(--brand);color:#fff}.button.primary:hover{background:#3e1f69}.button.small{min-height:32px;padding:0 10px}.button.ghost{background:transparent}.button:disabled{opacity:.45;cursor:not-allowed}
+    .content{width:min(1500px,100%);margin:auto;padding:25px 30px 72px}.view{display:none;animation:fade .22s ease}.view.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+    .notice{display:flex;gap:11px;align-items:flex-start;padding:13px 15px;border-radius:12px;border:1px solid #ead7b4;background:var(--gold-soft);font-size:10px;line-height:1.5;margin-bottom:14px}.notice strong{display:block;margin-bottom:2px}.notice-icon{width:23px;height:23px;flex:0 0 23px;display:grid;place-items:center;border-radius:7px;background:#fff3d5;color:#976013;font-weight:900}
+    .empty-real{display:none}.real-mode .demo-content{display:none!important}.real-mode .empty-real{display:block}.real-empty{padding:40px 25px;text-align:center}.real-empty strong{display:block;font-size:17px}.real-empty p{max-width:600px;margin:9px auto 0;color:var(--muted);font-size:11px;line-height:1.6}
+    .filters-card,.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.filters-card{padding:17px;margin-bottom:15px;box-shadow:none}.filters-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}.filters-head strong{font-size:11px}.filter-grid{display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:9px}.field label{display:block;margin:0 0 6px 2px;color:var(--muted);font-size:8px;font-weight:850;text-transform:uppercase;letter-spacing:.08em}.field select,.field input{width:100%;height:39px;border:1px solid var(--line);background:#fff;border-radius:9px;padding:0 10px;font-size:10px;font-weight:650}.filters-foot{display:flex;justify-content:space-between;gap:12px;margin-top:11px;padding-top:10px;border-top:1px solid #eeece8;color:var(--muted);font-size:9px}
+    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:15px;margin:20px 0 14px}.section-head:first-child{margin-top:0}.section-head h2{margin:0;font-size:21px;letter-spacing:-.035em}.section-head p{margin:5px 0 0;color:var(--muted);font-size:10px}.eyebrow{color:var(--muted);font-size:8px;text-transform:uppercase;letter-spacing:.1em;font-weight:900}.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:99px;font-size:8px;font-weight:850}.chip.good{color:var(--teal);background:var(--teal-soft)}.chip.warn{color:#966114;background:var(--gold-soft)}.chip.danger{color:var(--red);background:var(--red-soft)}.chip.brand{color:var(--brand);background:var(--brand-soft)}.chip.neutral{color:#5e6270;background:#efefed}
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px}.kpi{padding:16px 17px;box-shadow:none}.kpi-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.kpi-value{font-size:24px;font-weight:900;letter-spacing:-.04em;margin-top:13px}.kpi-foot{margin-top:4px;color:var(--muted);font-size:8px;line-height:1.4}.delta{font-size:8px;font-weight:850;color:var(--teal)}.delta.bad{color:var(--red)}
+    .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}.product-card{padding:17px;box-shadow:none;position:relative;overflow:hidden;border-top:3px solid var(--brand)}.product-card::after{content:"";position:absolute;width:105px;height:105px;border:26px solid var(--brand-soft);border-radius:50%;right:-62px;top:-64px;opacity:.7}.product-head{display:flex;justify-content:space-between;gap:8px;position:relative;z-index:1}.product-name{font-size:18px;font-weight:900;letter-spacing:-.035em;margin-top:7px}.product-meta{color:var(--muted);font-size:9px;line-height:1.45;margin-top:3px;min-height:27px}.product-price{font-size:26px;font-weight:900;letter-spacing:-.04em;margin-top:16px}.product-range{color:var(--muted);font-size:8px;margin-top:3px}.sku-list{margin:14px 0;border:1px solid var(--line);border-radius:11px;overflow:hidden}.sku-list-head{display:flex;justify-content:space-between;gap:10px;padding:9px 11px;background:var(--surface-2);color:var(--muted);font-size:7px;font-weight:850;text-transform:uppercase;letter-spacing:.07em}.sku-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 11px;border-top:1px solid #eeece8}.sku-row:first-of-type{border-top:0}.sku-name{font-size:9px;font-weight:800;line-height:1.35}.sku-meta{margin-top:3px;color:var(--muted);font-size:7px}.sku-price{text-align:right}.sku-price strong{display:block;font-size:12px}.sku-price small{display:block;margin-top:3px;color:var(--muted);font-size:7px}.mini-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}.mini-metric{padding:9px;background:var(--surface-2);border-radius:9px}.mini-metric span{display:block;color:var(--muted);font-size:7px;text-transform:uppercase;letter-spacing:.07em}.mini-metric strong{display:block;margin-top:4px;font-size:10px}.card-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:11px;border-top:1px solid #eeece8}.update{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:8px}.update i{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+    .insight-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(290px,.65fr);gap:12px;margin-top:15px}.insight-card,.chart-card{padding:18px;box-shadow:none}.insight-card{background:var(--brand-dark);color:#fff;border:0}.insight-card .eyebrow{color:#bfb5cf}.insight-card h3,.panel-head h3{margin:5px 0 0;font-size:15px;letter-spacing:-.025em}.insights{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:15px;background:rgba(255,255,255,.11);border-radius:12px;overflow:hidden}.insight{background:rgba(255,255,255,.045);padding:13px}.insight span{color:#bfb5cf;font-size:8px;text-transform:uppercase;letter-spacing:.07em}.insight strong{display:block;margin-top:5px;font-size:11px;line-height:1.4}.method-card{padding:18px;box-shadow:none}.method-card p{font-size:10px;line-height:1.6;color:var(--muted);margin:10px 0 0}.method-card ul{margin:12px 0 0;padding-left:17px;color:var(--muted);font-size:9px;line-height:1.8}
+    .charts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px}.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.panel-head p{margin:4px 0 0;color:var(--muted);font-size:9px}.chart-wrap{height:235px;margin-top:14px;position:relative}.chart-wrap.short{height:185px}canvas{display:block;width:100%;height:100%}.legend{display:flex;flex-wrap:wrap;gap:11px;margin-top:9px;color:var(--muted);font-size:8px}.legend span{display:flex;align-items:center;gap:5px}.legend i{width:13px;height:3px;border-radius:5px}
+    .mode-tabs{display:flex;gap:6px;padding:5px;background:#eae8e5;border-radius:11px;margin-bottom:14px;width:max-content;max-width:100%;overflow:auto}.mode-tab{border:0;background:transparent;padding:9px 13px;border-radius:8px;color:var(--muted);font-size:9px;font-weight:850;white-space:nowrap}.mode-tab.active{background:#fff;color:var(--brand);box-shadow:0 3px 10px rgba(33,23,70,.08)}
+    .compare-panel{padding:18px;box-shadow:none;margin-bottom:12px}.compare-grid{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr));gap:9px}.compare-note{margin-top:11px;padding-top:10px;border-top:1px solid #eeece8;color:var(--muted);font-size:9px;display:flex;justify-content:space-between;gap:12px}.molecule-filter{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 0}.filter-pill{border:1px solid var(--line);background:#fff;padding:7px 10px;border-radius:99px;font-size:8px;font-weight:800}.filter-pill.active{color:var(--brand);border-color:#cdbde0;background:var(--brand-soft)}
+    .basket-panel{display:none;margin-top:12px;padding:13px;background:var(--surface-2);border:1px solid var(--line);border-radius:11px}.basket-panel.show{display:block}.basket-head{display:flex;justify-content:space-between;gap:12px;align-items:center}.basket-head strong{font-size:10px}.basket-head span{color:var(--muted);font-size:8px}.check-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px;max-height:190px;overflow:auto}.check-item{display:flex;align-items:center;gap:7px;padding:8px;background:#fff;border:1px solid var(--line);border-radius:8px;font-size:8px}.check-item input{accent-color:var(--brand)}.check-item small{margin-left:auto;color:var(--muted)}
+    .duel-grid{display:grid;grid-template-columns:1fr minmax(230px,.55fr) 1fr;gap:10px;margin-bottom:12px}.duel-card{padding:19px;box-shadow:none;border-top:4px solid var(--brand)}.duel-card.right{border-top-color:var(--blue)}.duel-card h3{margin:8px 0 3px;font-size:19px}.duel-meta{color:var(--muted);font-size:9px}.duel-price{font-size:31px;font-weight:900;letter-spacing:-.045em;margin-top:18px}.duel-unit{color:var(--muted);font-size:8px;margin-top:4px}.gap-card{padding:18px;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#fbf8f1;border-color:#eadfc9;box-shadow:none}.gap-value{font-size:39px;font-weight:900;letter-spacing:-.05em;color:#a9651b;margin-top:8px}.gap-card p{font-size:9px;line-height:1.5;margin:6px 0 0;color:#625d53}.metric-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px}.metric{padding:12px;border:1px solid var(--line);background:#fff;border-radius:11px}.metric span{display:block;color:var(--muted);font-size:7px;text-transform:uppercase;letter-spacing:.07em;font-weight:850}.metric strong{display:block;margin-top:6px;font-size:14px}.mandatory{padding:13px 15px;margin-bottom:12px;border:1px solid #d7cee5;background:var(--brand-soft);border-radius:11px;color:#443458;font-size:9px;line-height:1.5}.mandatory strong{color:var(--brand)}
+    .table-card{overflow:hidden;box-shadow:none}.table-tools{padding:16px 17px 12px;display:flex;justify-content:space-between;gap:12px;align-items:flex-end}.tool-row{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.compact-select{height:32px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:0 8px;font-size:8px;font-weight:750}.toggle{display:flex;gap:6px;align-items:center;font-size:8px;color:var(--muted);white-space:nowrap}.toggle input{accent-color:var(--brand)}.table-wrap{overflow:auto;max-height:520px}table{border-collapse:collapse;width:100%;font-size:9px}th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #eceae6;white-space:nowrap}th{position:sticky;top:0;background:var(--surface-2);color:var(--muted);font-size:7px;text-transform:uppercase;letter-spacing:.07em;z-index:1}tbody tr:hover{background:#fbfaf8}.network{font-weight:800}.table-price strong{display:block}.table-price small{display:block;color:var(--muted);margin-top:3px}.stock{display:inline-flex;padding:5px 7px;border-radius:99px;background:var(--teal-soft);color:var(--teal);font-size:7px;font-weight:850}.stock.low{background:var(--gold-soft);color:#946014}
+    .quality-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:12px;margin-bottom:14px}.quality-score{padding:23px;color:#fff;background:var(--brand-dark);border:0;box-shadow:none}.quality-score strong{display:block;font-size:52px;letter-spacing:-.06em;margin-top:15px}.quality-score p{color:#c5bcd3;font-size:10px;line-height:1.55;margin:8px 0 0;max-width:560px}.quality-status{padding:20px;box-shadow:none}.status-list{display:grid;gap:11px;margin-top:14px}.status-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding-bottom:10px;border-bottom:1px solid #eceae6;font-size:9px}.status-row:last-child{border:0;padding:0}.status-row span{color:var(--muted)}.audit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:14px}.audit{padding:15px;box-shadow:none}.audit strong{display:block;font-size:22px;margin-top:10px}.audit p{color:var(--muted);font-size:8px;line-height:1.45;margin:4px 0 0}.quality-columns{display:grid;grid-template-columns:1fr 1fr;gap:12px}.issue-list,.source-list{display:grid;gap:8px;margin-top:14px}.issue,.source-row{padding:11px;border:1px solid var(--line);background:var(--surface-2);border-radius:10px;display:grid;grid-template-columns:1fr auto;gap:12px}.issue strong,.source-row strong{font-size:9px}.issue p,.source-row p{margin:4px 0 0;color:var(--muted);font-size:8px;line-height:1.45}.issue-count{font-weight:900;font-size:13px}.data-dictionary{margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.dictionary-item{padding:10px;border:1px solid var(--line);border-radius:9px}.dictionary-item strong{display:block;font-size:8px}.dictionary-item span{display:block;color:var(--muted);font-size:7px;margin-top:4px}
+    .toast{position:fixed;right:22px;bottom:22px;z-index:90;padding:12px 15px;border-radius:10px;background:#1e2130;color:#fff;font-size:10px;box-shadow:0 13px 30px rgba(0,0,0,.2);opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:none}.bottom-nav{display:none}
+    @media(max-width:1180px){.filter-grid{grid-template-columns:repeat(3,1fr)}.product-grid{grid-template-columns:repeat(2,1fr)}.metric-strip{grid-template-columns:repeat(3,1fr)}.check-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:900px){.sidebar{position:static;width:auto;height:auto;padding:14px 18px;display:block}.brand{padding:0}.sidebar .nav-label,.sidebar .nav,.sidebar-spacer,.mode-card{display:none}.main{margin-left:0}.topbar{top:0;padding:11px 17px;min-height:68px}.content{padding:18px 16px 82px}.top-actions .button.ghost{display:none}.kpi-grid{grid-template-columns:repeat(2,1fr)}.charts-grid,.insight-layout,.quality-hero,.quality-columns{grid-template-columns:1fr}.compare-grid{grid-template-columns:repeat(2,1fr)}.duel-grid{grid-template-columns:1fr}.gap-card{grid-row:2}.audit-grid{grid-template-columns:repeat(2,1fr)}.bottom-nav{position:fixed;display:grid;grid-template-columns:repeat(3,1fr);inset:auto 0 0;z-index:80;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:7px 8px calc(7px + env(safe-area-inset-bottom))}.bottom-nav button{border:0;background:transparent;padding:7px 3px;color:var(--muted);font-size:8px;font-weight:800}.bottom-nav button span{display:block;font-size:14px;margin-bottom:2px}.bottom-nav button.active{color:var(--brand)}}
+    @media(max-width:620px){.heading h1{font-size:15px}.heading p{max-width:210px}.top-actions .select{width:104px}.filter-grid,.compare-grid{grid-template-columns:1fr 1fr}.filters-foot,.compare-note,.table-tools{align-items:flex-start;flex-direction:column}.product-grid,.kpi-grid{grid-template-columns:1fr}.charts-grid{gap:9px}.chart-card{padding:14px}.chart-wrap{height:210px}.insights{grid-template-columns:1fr}.metric-strip{grid-template-columns:1fr 1fr}.check-grid{grid-template-columns:1fr 1fr}.tool-row{justify-content:flex-start}.audit-grid{grid-template-columns:1fr 1fr}.data-dictionary{grid-template-columns:1fr}.section-head{align-items:flex-start}.section-head h2{font-size:18px}}
+  </style>
 </head>
 <body>
-<header>
-  <div class="head"><div><h1>Inteligência de Preços — Vortioxetina</h1><div class="sub">Comparação executiva de preço, desconto e consistência competitiva</div></div><div class="sub" id="today"></div></div>
-  <div class="tabs"><button data-v="exec">Visão Executiva</button><button class="active" data-v="duel">Duelo de Preços</button></div>
-</header>
-<main>
-<section id="exec" class="view">
-  <div class="card"><h3>Visão Executiva</h3><div class="desc">A primeira aba permanece preservada nesta versão do protótipo. A evolução implementada aqui está concentrada no Duelo de Preços.</div></div>
-</section>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Navegação principal">
+      <div class="brand"><div class="brand-mark" aria-hidden="true">IP</div><div><strong>Inteligência de Preços</strong><span>Portfólio Lundbeck</span></div></div>
+      <div class="nav-label">Plataforma</div>
+      <nav class="nav">
+        <button class="active" data-view="executive"><span class="nav-icon">⌂</span>Visão Executiva</button>
+        <button data-view="comparator"><span class="nav-icon">⇄</span>Comparador de Preços</button>
+        <button data-view="quality"><span class="nav-icon">◎</span>Qualidade dos Dados</button>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="mode-card"><div class="mode-line"><span class="status-dot"></span><span id="sideMode">Modo Demonstrativo</span></div><p id="sideModeText">Valores sintéticos para validar fluxos, cálculos e experiência. Não representam preços de mercado.</p></div>
+    </aside>
 
-<section id="duel" class="view active">
-  <div class="filters">
-    <div class="field"><label>Produto A</label><select id="selA"></select></div>
-    <div class="field"><label>Produto B</label><select id="selB"></select></div>
-    <button id="swap" class="action swap">⇄ Inverter produtos</button>
-    <div class="field"><label>Cidade</label><select id="city"><option>Vitória/ES</option><option>São Paulo/SP</option><option>Rio de Janeiro/RJ</option><option>Belo Horizonte/MG</option><option>Curitiba/PR</option></select></div>
+    <main class="main">
+      <header class="topbar">
+        <div class="heading"><h1 id="pageTitle">Inteligência de Preços — Portfólio Lundbeck</h1><p id="pageSubtitle">Visão executiva e posicionamento competitivo de preços</p></div>
+        <div class="top-actions"><select id="quickMode" class="select" aria-label="Modo dos dados"><option value="demo">Demonstrativo</option><option value="real">Real</option></select><button class="button ghost" id="shareButton">Copiar resumo</button><button class="button primary" id="exportButton">Exportar CSV</button></div>
+      </header>
+
+      <div class="content">
+        <div class="notice" id="dataNotice"><div class="notice-icon">i</div><div><strong>Base demonstrativa ativa</strong>Os valores foram gerados localmente para demonstrar a plataforma. Nenhum preço deve ser interpretado como observação real. A análise é exclusivamente econômica e não contém recomendação médica.</div></div>
+        <div class="card real-empty empty-real"><strong>Nenhuma base real foi anexada</strong><p>O modo Real permanece vazio para evitar que valores demonstrativos sejam apresentados como observações de mercado. Anexe uma base validada de produtos, apresentações, EANs e preços para habilitá-lo.</p></div>
+
+        <div class="demo-content">
+          <section class="filters-card" aria-labelledby="globalFiltersTitle">
+            <div class="filters-head"><strong id="globalFiltersTitle">Filtros globais</strong><button class="button small" id="clearFilters">Limpar filtros</button></div>
+            <div class="filter-grid">
+              <div class="field"><label for="filterCity">Cidade</label><select id="filterCity"></select></div>
+              <div class="field"><label for="filterUf">UF</label><select id="filterUf"></select></div>
+              <div class="field"><label for="filterCep">CEP</label><select id="filterCep"></select></div>
+              <div class="field"><label for="filterPeriod">Período</label><select id="filterPeriod"></select></div>
+              <div class="field"><label for="filterProduct">Produto Lundbeck</label><select id="filterProduct"></select></div>
+              <div class="field"><label for="filterMolecule">Molécula</label><select id="filterMolecule"></select></div>
+              <div class="field"><label for="filterMarket">Mercado</label><select id="filterMarket"></select></div>
+              <div class="field"><label for="filterPresentation">Apresentação</label><select id="filterPresentation"></select></div>
+              <div class="field"><label for="filterNetwork">Rede</label><select id="filterNetwork"></select></div>
+              <div class="field"><label for="filterMode">Modo dos dados</label><select id="filterMode"><option value="demo">Demonstrativo</option><option value="real">Real</option></select></div>
+            </div>
+            <div class="filters-foot"><span id="filterSummary">Todos os recortes demonstrativos</span><span>Moeda: BRL · filtros preservam cidade, período e rede</span></div>
+          </section>
+
+          <section class="view active" id="executive" aria-labelledby="executiveTitle">
+            <div class="section-head"><div><h2 id="executiveTitle">Visão Executiva</h2><p>Leitura rápida do portfólio, cobertura e posicionamento econômico.</p></div><span class="chip warn">Dados demonstrativos</span></div>
+            <div class="kpi-grid" id="kpiGrid"></div>
+            <div class="section-head"><div><h2>Portfólio Lundbeck</h2><p>Sete marcas monitoradas; comparação competitiva disponível para quatro.</p></div><span class="chip neutral" id="portfolioCount">7 produtos</span></div>
+            <div class="product-grid" id="productGrid"></div>
+            <div class="insight-layout">
+              <article class="card insight-card"><span class="eyebrow">Insights executivos</span><h3>O que os dados descrevem neste recorte</h3><div class="insights" id="insightGrid"></div></article>
+              <article class="card method-card"><span class="eyebrow">Guardrails analíticos</span><h3>Leitura responsável</h3><p>Os insights são calculados automaticamente e descrevem somente preço, cobertura, atualização e dispersão.</p><ul><li>Sem recomendação médica.</li><li>Sem inferência de equivalência terapêutica.</li><li>Gap calculado apenas com observações comparáveis.</li><li>Caixas diferentes exigem normalização por unidade.</li></ul></article>
+            </div>
+            <div class="charts-grid">
+              <article class="card chart-card"><div class="panel-head"><div><span class="eyebrow">Ranking</span><h3>Preços médios</h3><p>Preço final médio por marca Lundbeck</p></div></div><div class="chart-wrap"><canvas id="rankingChart" aria-label="Ranking de preços médios" role="img"></canvas></div></article>
+              <article class="card chart-card"><div class="panel-head"><div><span class="eyebrow">Evolução</span><h3>Movimento mensal do portfólio</h3><p>Média das observações por produto e período</p></div></div><div class="chart-wrap"><canvas id="trendChart" aria-label="Evolução mensal por produto" role="img"></canvas></div><div class="legend" id="trendLegend"></div></article>
+              <article class="card chart-card"><div class="panel-head"><div><span class="eyebrow">Movimento no período</span><h3>Maior alta e maior redução</h3><p>Variação entre os dois períodos mais recentes</p></div></div><div class="chart-wrap short"><canvas id="movementChart" aria-label="Maiores variações mensais" role="img"></canvas></div></article>
+              <article class="card chart-card"><div class="panel-head"><div><span class="eyebrow">Amplitude</span><h3>Dispersão entre redes</h3><p>Diferença percentual entre mínimo e máximo</p></div></div><div class="chart-wrap short"><canvas id="dispersionChart" aria-label="Dispersão de preços entre redes" role="img"></canvas></div></article>
+              <article class="card chart-card"><div class="panel-head"><div><span class="eyebrow">Cobertura</span><h3>Cobertura por produto</h3><p>Redes com observações disponíveis</p></div></div><div class="chart-wrap short"><canvas id="coverageProductChart" aria-label="Cobertura por produto" role="img"></canvas></div></article>
+              <article class="card chart-card"><div class="panel-head"><div><span class="eyebrow">Geografia</span><h3>Cobertura por cidade</h3><p>Percentual de observações válidas no recorte</p></div></div><div class="chart-wrap short"><canvas id="coverageCityChart" aria-label="Cobertura por cidade" role="img"></canvas></div></article>
+              <article class="card chart-card"><div class="panel-head"><div><span class="eyebrow">Posicionamento</span><h3>Gap contra o mercado</h3><p>Preço unitário da marca versus cesta do grupo</p></div></div><div class="chart-wrap short"><canvas id="gapChart" aria-label="Ranking de gap contra o mercado" role="img"></canvas></div></article>
+              <article class="card chart-card"><div class="panel-head"><div><span class="eyebrow">Cestas competitivas</span><h3>Marca Lundbeck × cesta</h3><p>Preço unitário médio, sem equivalência terapêutica</p></div></div><div class="chart-wrap short"><canvas id="basketChart" aria-label="Comparação entre marcas Lundbeck e cestas competitivas" role="img"></canvas></div></article>
+            </div>
+          </section>
+
+          <section class="view" id="comparator" aria-labelledby="comparatorTitle">
+            <div class="section-head"><div><h2 id="comparatorTitle">Comparador de Preços</h2><p>Escolha primeiro a marca Lundbeck; o universo competitivo será aplicado automaticamente.</p></div><span class="chip brand" id="marketBadge">Target REXULTI</span></div>
+            <div class="mode-tabs" aria-label="Modo de comparação"><button class="mode-tab active" data-compare-mode="direct">Produto versus produto</button><button class="mode-tab" data-compare-mode="basket">Produto versus cesta competitiva</button><button class="mode-tab" data-compare-mode="molecule">Molécula versus molécula</button></div>
+            <article class="card compare-panel">
+              <div class="compare-grid">
+                <div class="field"><label for="compareLundbeck">Produto Lundbeck</label><select id="compareLundbeck"></select></div>
+                <div class="field direct-control"><label for="compareCompetitor">Concorrente</label><select id="compareCompetitor"></select></div>
+                <div class="field molecule-control" hidden><label for="moleculeA">Cesta A</label><select id="moleculeA"><option value="Vortioxetina">Vortioxetina</option><option value="Escitalopram">Escitalopram</option></select></div>
+                <div class="field molecule-control" hidden><label for="moleculeB">Cesta B</label><select id="moleculeB"><option value="Escitalopram">Escitalopram</option><option value="Vortioxetina">Vortioxetina</option></select></div>
+                <div class="field"><label for="comparePresentationA">Apresentação Lundbeck / cesta A</label><select id="comparePresentationA"></select></div>
+                <div class="field direct-control"><label for="comparePresentationB">Apresentação concorrente</label><select id="comparePresentationB"></select></div>
+                <div class="field"><label for="normalization">Métrica principal</label><select id="normalization"><option value="unit">Preço por unidade</option><option value="box">Preço por caixa</option><option value="month">Custo para 30 dias</option></select></div>
+              </div>
+              <div class="molecule-filter" id="moleculeFilters"></div>
+              <div class="basket-panel" id="basketPanel"><div class="basket-head"><strong id="basketTitle">Produtos incluídos na cesta</strong><span id="basketCount"></span></div><div class="check-grid" id="basketChecks"></div></div>
+              <div class="compare-note"><span id="compareContext"></span><span>Redes sem interseção válida ficam fora do cálculo.</span></div>
+            </article>
+            <div class="mandatory" id="normalizationNotice"><strong>Atenção:</strong> Apresentações com quantidades diferentes — priorize a análise normalizada.</div>
+            <div class="mandatory" id="moleculeNotice" hidden><strong>Comparação exclusivamente econômica.</strong> Os produtos podem possuir princípios ativos, doses, apresentações, indicações ou regimes de tratamento diferentes. O resultado não representa equivalência terapêutica.</div>
+            <div class="duel-grid" id="duelGrid"></div>
+            <div class="metric-strip" id="metricStrip"></div>
+            <article class="card table-card">
+              <div class="table-tools"><div><span class="eyebrow">Duelo por rede</span><h3 style="margin:5px 0 0;font-size:15px">Comparação em interseções válidas</h3><p id="duelSubtitle" style="margin:4px 0 0;color:var(--muted);font-size:9px"></p></div><div class="tool-row"><select class="compact-select" id="duelSort" aria-label="Ordenar duelo"><option value="gapDesc">Maior gap</option><option value="gapAsc">Menor gap</option><option value="leftPrice">Menor preço Lundbeck/A</option><option value="rightPrice">Menor preço concorrente/B</option><option value="discount">Maior desconto</option><option value="recent">Leitura mais recente</option></select><label class="toggle"><input type="checkbox" id="hideUnavailable" checked>Ocultar indisponíveis</label><label class="toggle"><input type="checkbox" id="hideIncompatible" checked>Ocultar incompatíveis</label><label class="toggle"><input type="checkbox" id="hideStale" checked>Ocultar vencidas</label><label class="toggle"><input type="checkbox" id="hideNoIntersection" checked>Ocultar sem interseção</label></div></div>
+              <div class="table-wrap"><table><thead><tr><th>Rede</th><th>Produto / cesta A</th><th>Produto / cesta B</th><th>Gap R$</th><th>Gap %</th><th>Disponibilidade</th><th>Cidade / CEP</th><th>Origem</th><th>Observado</th></tr></thead><tbody id="duelRows"></tbody></table></div>
+            </article>
+          </section>
+
+          <section class="view" id="quality" aria-labelledby="qualityTitle">
+            <div class="section-head"><div><h2 id="qualityTitle">Qualidade dos Dados</h2><p>Completude, rastreabilidade, atualização e conflitos da base carregada.</p></div><span class="chip warn">Modo Demonstrativo</span></div>
+            <div class="quality-hero"><article class="card quality-score"><span class="eyebrow">Índice de qualidade demonstrativo</span><strong id="qualityScore">—</strong><p>O índice combina completude das apresentações, presença de molécula, disponibilidade, atualização e rastreabilidade. É um indicador operacional, não uma validação científica.</p></article><article class="card quality-status"><span class="eyebrow">Estado do conjunto</span><h3 style="margin:5px 0 0">Pronto para validação</h3><div class="status-list" id="qualityStatus"></div></article></div>
+            <div class="audit-grid" id="auditGrid"></div>
+            <div class="quality-columns">
+              <article class="card chart-card"><div class="panel-head"><div><span class="eyebrow">Pendências detectadas</span><h3>Fila de qualidade</h3><p>Nenhum registro é descartado silenciosamente.</p></div></div><div class="issue-list" id="issueList"></div></article>
+              <article class="card chart-card"><div class="panel-head"><div><span class="eyebrow">Rastreabilidade</span><h3>Fontes e transformações</h3><p>Valor original preservado e normalização separada.</p></div></div><div class="source-list" id="sourceList"></div></article>
+            </div>
+            <article class="card chart-card" style="margin-top:12px"><div class="panel-head"><div><span class="eyebrow">Estrutura central</span><h3>Dicionário mínimo do produto</h3><p>Campos suportados pelo cadastro e pelos cálculos.</p></div></div><div class="data-dictionary" id="dataDictionary"></div></article>
+          </section>
+        </div>
+      </div>
+    </main>
   </div>
-  <div id="context" class="context"></div>
+  <nav class="bottom-nav" aria-label="Navegação móvel"><button class="active" data-view="executive"><span>⌂</span>Executiva</button><button data-view="comparator"><span>⇄</span>Comparador</button><button data-view="quality"><span>◎</span>Qualidade</button></nav>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <div class="scoreboard">
-    <div id="fighterA" class="card fighter"><div class="tag">Produto A</div><h2 id="aName"></h2><div id="aMeta" class="meta"></div><div id="aPrice" class="price"></div><div id="aUnit" class="unit"></div></div>
-    <div class="centerScore"><div class="tag">Gap percentual</div><div id="gapMain" class="gapMain"></div><div id="gapDirection" class="gapSub"></div><div id="gapBox" class="gapLine"></div><div id="qtyNotice" class="notice" style="display:none"></div></div>
-    <div id="fighterB" class="card fighter"><div class="tag">Produto B</div><h2 id="bName"></h2><div id="bMeta" class="meta"></div><div id="bPrice" class="price"></div><div id="bUnit" class="unit"></div></div>
-  </div>
+  <script>
+    const competitorMarkets = Object.freeze({
+      n06_sri: {
+        name: "N06A – SRI", markets:["N06","DOT","N06A – SRI"], lundbeckProducts:["LEXAPRO","VURTUOSO","BRINTELLIX"],
+        competitors:["VELIJA (LIB)","RECONTER (LIB)","DESVE (EUF)","EXODUS (A4H)","DELLER (A4H)","VENLIFT OD (TNT)","DAFORIN (EMS)","ESC (EUF)","PONDERA XR (EUF)","ASSERT (EUF)","BUP XL (EUF)","ZOLOFT (VI/)","BRINTELLIX + VURTUOSO (LUN)","ZETRON XL (LIB)","DESDUO (TNT)","TOLREST (A4H)","DUAL (A4H)","REVOC (ABD)","VURTUOSO (LUN)","LEXAPRO (LUN)","ELIFORE (PFZ)","VENLAXIN XR (EUF)","SERENATA (TNT)","VOEXTOR (LIB)","PRISTIQ (PFZ)","BUPIUM XL (EMS)","SEMTRI (BS2)","ESC ODT (EUF)","AYMEE (LIB)","AFETUS (EUF)","IMENSE (EMS)","EFEXOR XR (VI/)","CYMBI (EMS)","PROCIMAX (LIB)","PONDERA (EUF)","WELLBUTRIN XL (GSK)","ALENTHUS XR (A4H)","RAZAPINA (MA8)","ANDES (SP0)","MENELAT ODT (TNT)","ESPRAN (TNT)","PAXIL CR (GSK)","BRINTELLIX (LUN)","RAZAPINA ODT (MA8)","VOGNUS (EMS)"]
+      },
+      rexulti_target: {
+        name:"Target REXULTI", markets:["Target REXULTI"], lundbeckProducts:["REXULTI"],
+        competitors:["ARISTAB (A4H)","REXULTI (LUN)","ARPEJO (EMS)","LATUDA (DCS)","QUET XR (EUF)","QUETROS (A4H)","LUTAB (A4H)","LUBIP (TNT)","TOARIP (TNT)","AQUARELA (A4H)","QUEPSIA LP (EUF)","QUET (EUF)","QUETIPIN (CT6)","HARIP (PZ8)","SEROQUEL XRO (MA8)"]
+      }
+    });
 
-  <div id="summary" class="summary"></div>
+    const makeSku=(product,id,shortLabel,originalLabel,dose,quantity,form,unitLabel,priceFactor=1)=>({id:`${product}_${id}`,shortLabel,originalLabel,dose,quantity,form,unitLabel,priceFactor,ean:null,source:"Lista de SKUs fornecida pelo usuário"});
+    const LUNDBECK_PRODUCTS = [
+      {id:"LEXAPRO",brand:"Lexapro",molecule:"Escitalopram",lab:"LUN",market:"N06A – SRI",group:"n06_sri",type:"Lundbeck",status:"ativo",source:"Cadastro demonstrativo — validar",basePrice:219.9,monthly:.012,compare:true,skus:[
+        makeSku("LEXAPRO","10_30","Lexapro 10 mg x 30 cps","LEXAPRO COMPRIMIDO REVESTIDO 10.0 MG X 30.0 (LUN)","10 mg",30,"comprimido revestido","cp",1),makeSku("LEXAPRO","10_60","Lexapro 10 mg x 60 cps","LEXAPRO COMPRIMIDO REVESTIDO 10.0 MG X 60.0 (LUN)","10 mg",60,"comprimido revestido","cp",1.76),
+        makeSku("LEXAPRO","15_30","Lexapro 15 mg x 30 cps","LEXAPRO COMPRIMIDO REVESTIDO 15.0 MG X 30.0 (LUN)","15 mg",30,"comprimido revestido","cp",1.18),makeSku("LEXAPRO","15_60","Lexapro 15 mg x 60 cps","LEXAPRO COMPRIMIDO REVESTIDO 15.0 MG X 60.0 (LUN)","15 mg",60,"comprimido revestido","cp",2.05),
+        makeSku("LEXAPRO","20_30","Lexapro 20 mg x 30 cps","LEXAPRO COMPRIMIDO REVESTIDO 20.0 MG X 30.0 (LUN)","20 mg",30,"comprimido revestido","cp",1.29),makeSku("LEXAPRO","GOTAS_20_15","Lexapro gotas 20 mg/mL x 15 mL","LEXAPRO GOTAS 20.0 MG 15.0 ML X 1.0 (/1.0ML) (LUN)","20 mg/mL",1,"gotas · frasco 15 mL","frasco",.72)
+      ]},
+      {id:"VURTUOSO",brand:"Vurtuoso",molecule:"Vortioxetina",lab:"LUN",market:"N06A – SRI",group:"n06_sri",type:"Lundbeck",status:"ativo",source:"Protótipo legado",basePrice:203.5,monthly:.018,compare:true,skus:[
+        makeSku("VURTUOSO","10_30","Vurtuoso 10 mg x 30 cps","VURTUOSO COMPRIMIDO REVESTIDO 10.0 MG X 30.0 (LUN)","10 mg",30,"comprimido revestido","cp",1),makeSku("VURTUOSO","10_60","Vurtuoso 10 mg x 60 cps","VURTUOSO COMPRIMIDO REVESTIDO 10.0 MG X 60.0 (LUN)","10 mg",60,"comprimido revestido","cp",1.79),
+        makeSku("VURTUOSO","15_30","Vurtuoso 15 mg x 30 cps","VURTUOSO COMPRIMIDO REVESTIDO 15.0 MG X 30.0 (LUN)","15 mg",30,"comprimido revestido","cp",1.16),makeSku("VURTUOSO","15_60","Vurtuoso 15 mg x 60 cps","VURTUOSO COMPRIMIDO REVESTIDO 15.0 MG X 60.0 (LUN)","15 mg",60,"comprimido revestido","cp",2.03),
+        makeSku("VURTUOSO","20_30","Vurtuoso 20 mg x 30 cps","VURTUOSO COMPRIMIDO REVESTIDO 20.0 MG X 30.0 (LUN)","20 mg",30,"comprimido revestido","cp",1.28),makeSku("VURTUOSO","20_60","Vurtuoso 20 mg x 60 cps","VURTUOSO COMPRIMIDO REVESTIDO 20.0 MG X 60.0 (LUN)","20 mg",60,"comprimido revestido","cp",2.2),makeSku("VURTUOSO","5_30","Vurtuoso 5 mg x 30 cps","VURTUOSO COMPRIMIDO REVESTIDO 5.0 MG X 30.0 (LUN)","5 mg",30,"comprimido revestido","cp",.73)
+      ]},
+      {id:"BRINTELLIX",brand:"Brintellix",molecule:"Vortioxetina",lab:"LUN",market:"N06A – SRI",group:"n06_sri",type:"Lundbeck",status:"ativo",source:"Protótipo legado",basePrice:226.8,monthly:.009,compare:true,skus:[
+        makeSku("BRINTELLIX","10_30","Brintellix 10 mg x 30 cps","BRINTELLIX COMPRIMIDO REVESTIDO 10.0 MG X 30.0 (LUN)","10 mg",30,"comprimido revestido","cp",1),makeSku("BRINTELLIX","10_60","Brintellix 10 mg x 60 cps","BRINTELLIX COMPRIMIDO REVESTIDO 10.0 MG X 60.0 (LUN)","10 mg",60,"comprimido revestido","cp",1.78),
+        makeSku("BRINTELLIX","15_60","Brintellix 15 mg x 60 cps","BRINTELLIX COMPRIMIDO REVESTIDO 15.0 MG X 60.0 (LUN)","15 mg",60,"comprimido revestido","cp",2.02),makeSku("BRINTELLIX","20_30","Brintellix 20 mg x 30 cps","BRINTELLIX COMPRIMIDO REVESTIDO 20.0 MG X 30.0 (LUN)","20 mg",30,"comprimido revestido","cp",1.3),makeSku("BRINTELLIX","5_30","Brintellix 5 mg x 30 cps","BRINTELLIX COMPRIMIDO REVESTIDO 5.0 MG X 30.0 (LUN)","5 mg",30,"comprimido revestido","cp",.74)
+      ]},
+      {id:"REXULTI",brand:"REXULTI",molecule:"Brexpiprazol",lab:"LUN",market:"Target REXULTI",group:"rexulti_target",type:"Lundbeck",status:"ativo",source:"Cadastro demonstrativo — validar",basePrice:338.4,monthly:.022,compare:true,skus:[
+        makeSku("REXULTI","05_30","REXULTI 0,5 mg x 30 cps","REXULTI COMPRIMIDO REVESTIDO 0.5 MG X 30.0 (LUN)","0,5 mg",30,"comprimido revestido","cp",.83),makeSku("REXULTI","1_30","REXULTI 1 mg x 30 cps","REXULTI COMPRIMIDO REVESTIDO 1.0 MG X 30.0 (LUN)","1 mg",30,"comprimido revestido","cp",1),makeSku("REXULTI","2_30","REXULTI 2 mg x 30 cps","REXULTI COMPRIMIDO REVESTIDO 2.0 MG X 30.0 (LUN)","2 mg",30,"comprimido revestido","cp",1.22),makeSku("REXULTI","3_30","REXULTI 3 mg x 30 cps","REXULTI COMPRIMIDO REVESTIDO 3.0 MG X 30.0 (LUN)","3 mg",30,"comprimido revestido","cp",1.38)
+      ]},
+      {id:"CIPRAMIL",brand:"Cipramil",molecule:"Citalopram",lab:"LUN",market:"Portfólio Lundbeck",group:null,type:"Lundbeck",status:"ativo",source:"Lista de SKUs fornecida",basePrice:154.7,monthly:-.006,compare:false,skus:[makeSku("CIPRAMIL","20_28","Cipramil 20 mg x 28 cps","CIPRAMIL COMPRIMIDO 2X14 20.0 MG X 28.0 (LUN)","20 mg",28,"comprimido","cp",1)]},
+      {id:"CLOPIXOL",brand:"Clopixol",molecule:"Zuclopentixol",lab:"LUN",market:"Portfólio Lundbeck",group:null,type:"Lundbeck",status:"ativo",source:"Lista de SKUs fornecida",basePrice:126.2,monthly:.004,compare:false,skus:[
+        makeSku("CLOPIXOL","ACUPHASE_50_1","Clopixol Acuphase 50 mg/1 mL x 1 amp","CLOPIXOL AMPOLA INTRAMUSCULAR ACUPHASE 50.0 MG 1.0 ML X 1.0 (LUN)","50 mg/1 mL",1,"ampola intramuscular","amp",1.25),makeSku("CLOPIXOL","DEPOT_200_1","Clopixol Depot 200 mg/1 mL x 1 amp","CLOPIXOL AMPOLA INTRAMUSCULAR DEPOT 200.0 MG 1.0 ML X 1.0 (LUN)","200 mg/1 mL",1,"ampola intramuscular","amp",2.2),
+        makeSku("CLOPIXOL","10_20","Clopixol 10 mg x 20 cps","CLOPIXOL COMPRIMIDO 2X10 10.0 MG X 20.0 (LUN)","10 mg",20,"comprimido","cp",.75),makeSku("CLOPIXOL","25_20","Clopixol 25 mg x 20 cps","CLOPIXOL COMPRIMIDO 2X10 25.0 MG X 20.0 (LUN)","25 mg",20,"comprimido","cp",1)
+      ]},
+      {id:"EBIX",brand:"Ebix",molecule:"Memantina",lab:"LUN",market:"Portfólio Lundbeck",group:null,type:"Lundbeck",status:"ativo",source:"Lista de SKUs fornecida",basePrice:182.6,monthly:-.011,compare:false,skus:[
+        makeSku("EBIX","10_28","Ebix 10 mg x 28 cps","EBIX COMPRIMIDO 10.0 MG X 28.0 (LUN)","10 mg",28,"comprimido","cp",1),makeSku("EBIX","10_56","Ebix 10 mg x 56 cps","EBIX COMPRIMIDO 10.0 MG X 56.0 (LUN)","10 mg",56,"comprimido","cp",1.72),makeSku("EBIX","20_30","Ebix 20 mg x 30 cps","EBIX COMPRIMIDO 20.0 MG X 30.0 (LUN)","20 mg",30,"comprimido","cp",1.35)
+      ]}
+    ].map(p=>{const primary=p.skus[0];return {...p,dose:primary.dose,quantity:primary.quantity,form:primary.form,ean:null,presentation:primary.shortLabel}});
 
-  <div class="kpis">
-    <div class="card kpi"><div class="lab">Gap caixa</div><div id="kBox" class="val"></div></div>
-    <div class="card kpi"><div class="lab">Gap percentual</div><div id="kPct" class="val"></div></div>
-    <div class="card kpi"><div class="lab">Gap unitário</div><div id="kUnit" class="val"></div><div class="foot">por comprimido</div></div>
-    <div class="card kpi"><div class="lab">Gap desconto</div><div id="kDisc" class="val"></div></div>
-    <div class="card kpi"><div class="lab">Redes comparáveis</div><div id="kNets" class="val"></div><div id="kNetsFoot" class="foot"></div></div>
-  </div>
+    const MOLECULE_REGISTRY = Object.freeze({
+      "BRINTELLIX":"Vortioxetina","VURTUOSO":"Vortioxetina","VOEXTOR":"Vortioxetina","VOGNUS":"Vortioxetina",
+      "LEXAPRO":"Escitalopram","RECONTER":"Escitalopram","EXODUS":"Escitalopram","ESC":"Escitalopram","ESC ODT":"Escitalopram","AYMEE":"Escitalopram","PROCIMAX":"Escitalopram","ESPRAN":"Escitalopram",
+      "REXULTI":"Brexpiprazol"
+    });
 
-  <div class="grid2">
-    <div class="card"><h3>Duelo por rede</h3><div class="desc">Ordenado pelo maior gap percentual. Dumbbell representa a distância entre os preços médios.</div><div id="networkRows"></div></div>
-    <div class="card"><h3>Insights do duelo</h3><div class="desc">Leitura automática do posicionamento</div><div id="insights"></div></div>
-  </div>
+    const RETAILERS=[
+      {name:"Raia",code:"RA",offset:.018,quality:98,source:"Observação demonstrativa"},{name:"Drogasil",code:"DG",offset:.029,quality:97,source:"Observação demonstrativa"},
+      {name:"Drogaria São Paulo",code:"DS",offset:-.014,quality:96,source:"Observação demonstrativa"},{name:"Pacheco",code:"PC",offset:-.009,quality:95,source:"Observação demonstrativa"},
+      {name:"Pague Menos",code:"PM",offset:-.025,quality:94,source:"Observação demonstrativa"},{name:"Panvel",code:"PV",offset:.015,quality:92,source:"Observação demonstrativa"},
+      {name:"São João",code:"SJ",offset:-.004,quality:91,source:"Observação demonstrativa"},{name:"Araujo",code:"AR",offset:.008,quality:93,source:"Observação demonstrativa"}
+    ];
+    const LOCATIONS=[{city:"São Paulo",uf:"SP",cep:"01310-100",factor:.986},{city:"Rio de Janeiro",uf:"RJ",cep:"20040-020",factor:1.018},{city:"Belo Horizonte",uf:"MG",cep:"30130-010",factor:.979},{city:"Vitória",uf:"ES",cep:"29010-120",factor:1.009},{city:"Curitiba",uf:"PR",cep:"80010-000",factor:.997}];
+    const PERIODS=["2026-03","2026-04","2026-05","2026-06","2026-07","2026-08"];
+    const MONTH_LABEL={"2026-03":"Mar","2026-04":"Abr","2026-05":"Mai","2026-06":"Jun","2026-07":"Jul","2026-08":"Ago"};
 
-  <div class="promo">
-    <div class="card"><h3>Comparação promocional</h3><div class="desc">Desconto médio aplicado aos dois produtos</div>
-      <div class="promoBlock"><div class="promoTitle"><strong id="promoAName"></strong><span id="promoAVal"></span></div><div class="bar a"><span id="promoABar"></span></div></div>
-      <div class="promoBlock" style="margin-top:10px"><div class="promoTitle"><strong id="promoBName"></strong><span id="promoBVal"></span></div><div class="bar b"><span id="promoBBar"></span></div></div>
-      <div id="promoText" class="promoText"></div>
-    </div>
-    <div class="card"><h3>Cobertura comparável</h3><div class="desc">Observação separada por produto e interseção das redes</div>
-      <div class="coverage"><div><div id="covA" class="big"></div><div id="covATxt" class="small"></div></div><div><div id="covB" class="big"></div><div id="covBTxt" class="small"></div></div><div><div id="covBoth" class="big"></div><div id="covBothTxt" class="small"></div></div></div>
-    </div>
-  </div>
+    const parseOriginal = (label,group) => {
+      const match=label.match(/^(.*) \(([^()]*)\)$/); const brand=(match?match[1]:label).trim(); const lab=match?match[2]:"";
+      const consolidated=brand==="BRINTELLIX + VURTUOSO";
+      return {id:`${group}_${brand.replace(/[^A-Z0-9]+/gi,"_")}`.toUpperCase(),brand,lab,originalLabel:label,normalizedBrand:brand.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase().replace(/\s+/g," ").trim(),group,consolidated};
+    };
+    const buildCompetitorCatalog = () => Object.entries(competitorMarkets).flatMap(([group,set])=>set.competitors.map((label,index)=>{
+      const p=parseOriginal(label,group); const molecule=MOLECULE_REGISTRY[p.brand]||null; const isLundbeck=p.lab==="LUN"; const quantity=30;
+      return {...p,molecule,quantity,dose:"apresentação demonstrativa",form:"comprimidos",ean:null,market:set.name,type:isLundbeck?"Lundbeck":"concorrente",status:p.consolidated?"agrupamento":"ativo",source:molecule?"Cadastro demonstrativo — molécula requer validação":"Briefing — molécula não informada",basePrice:72+(hash(p.brand)%17800)/100,monthly:((hash(p.brand+"trend")%51)-23)/1000,presentation:`apresentação demonstrativa · ${quantity} unidades`};
+    }));
+    const COMPETITOR_CATALOG=buildCompetitorCatalog();
+    const CATALOG=[...LUNDBECK_PRODUCTS,...COMPETITOR_CATALOG];
 
-  <div class="card" style="margin-bottom:10px"><h3>Evolução do gap competitivo</h3><div class="desc">Estrutura preparada para acompanhamento temporal</div><div id="history" class="history"></div></div>
+    const calc=Object.freeze({
+      values:(rows,key)=>rows.map(r=>typeof key==="function"?key(r):r[key]).filter(Number.isFinite),
+      mean:(rows,key)=>{const v=calc.values(rows,key);return v.length?v.reduce((a,b)=>a+b,0)/v.length:null},
+      median:(rows,key)=>{const v=calc.values(rows,key).sort((a,b)=>a-b);if(!v.length)return null;const m=Math.floor(v.length/2);return v.length%2?v[m]:(v[m-1]+v[m])/2},
+      min:(rows,key)=>{const v=calc.values(rows,key);return v.length?Math.min(...v):null}, max:(rows,key)=>{const v=calc.values(rows,key);return v.length?Math.max(...v):null},
+      unit:(price,qty)=>Number.isFinite(price)&&qty>0?price/qty:null, month:(unit)=>Number.isFinite(unit)?unit*30:null,
+      gapMoney:(a,b)=>Number.isFinite(a)&&Number.isFinite(b)?a-b:null, gapPct:(a,b)=>Number.isFinite(a)&&Number.isFinite(b)&&b!==0?(a/b-1)*100:null,
+      coverage:(rows,total)=>total>0?rows.filter(r=>r.available).length/total*100:null,
+      dispersion:(rows,key)=>{const min=calc.min(rows,key),max=calc.max(rows,key);return Number.isFinite(min)&&min!==0?(max/min-1)*100:null},
+      monthly:(current,previous)=>Number.isFinite(current)&&Number.isFinite(previous)&&previous!==0?(current/previous-1)*100:null,
+      basket:(rows,key="final")=>({count:rows.length,mean:calc.mean(rows,key),median:calc.median(rows,key),min:calc.min(rows,key),max:calc.max(rows,key)})
+    });
 
-  <div class="card">
-    <div class="catalogHeader" id="catToggle"><div><h3>▸ Catálogo de apresentações</h3><div class="desc" style="margin-bottom:0">Consulta e atalho para seleção no duelo</div></div><button class="action">Expandir</button></div>
-    <div id="catBody" class="catalogBody"><div class="tablewrap"><table><thead><tr><th>Produto</th><th>Fabricante</th><th>Classe</th><th>Apresentação</th><th>Ações</th></tr></thead><tbody id="catTable"></tbody></table></div></div>
-  </div>
-</section>
-</main>
-
-<script>
-const CATALOG=[{"name": "Brintellix", "maker": "Lundbeck", "cls": "Lundbeck", "packs": [[5, 30], [10, 30], [10, 60], [15, 30], [15, 60], [20, 30]]}, {"name": "Vurtuoso", "maker": "Lundbeck", "cls": "Lundbeck", "packs": [[5, 30], [10, 30], [10, 60], [15, 30], [15, 60], [20, 30], [20, 60]]}, {"name": "Vognus", "maker": "EMS", "cls": "Similar", "packs": [[5, 10], [5, 30], [5, 60], [10, 10], [10, 30], [10, 60]]}, {"name": "VOD", "maker": "Eurofarma", "cls": "Similar", "packs": [[5, 30], [10, 30], [15, 30], [20, 30]]}, {"name": "Voextor", "maker": "Libbs", "cls": "Similar", "packs": [[5, 15], [5, 30], [10, 15], [10, 30], [10, 60], [15, 15], [15, 30], [15, 60], [20, 15], [20, 30], [20, 60]]}, {"name": "Vorpro", "maker": "Germed", "cls": "Similar", "packs": [[5, 10], [5, 30], [5, 60], [10, 10], [10, 30], [10, 60]]}, {"name": "Vorxe", "maker": "Supera", "cls": "Similar", "packs": [[5, 10], [5, 30], [5, 60], [10, 10], [10, 30], [15, 30], [20, 30]]}, {"name": "Evortia", "maker": "Cosmed / Mantecorp", "cls": "Similar", "packs": [[5, 10], [5, 30], [5, 60], [10, 10], [10, 30], [10, 60], [15, 10], [15, 60], [20, 10], [20, 60]]}, {"name": "Vortioxetina Althaia", "maker": "Althaia", "cls": "Genérico", "packs": [[5, 30], [10, 30], [10, 60], [15, 30], [15, 60], [20, 30], [20, 60]]}, {"name": "Vortioxetina Neo Química", "maker": "Neo Química", "cls": "Genérico", "packs": [[5, 30], [5, 60], [10, 30], [10, 60], [15, 30], [15, 60], [20, 30], [20, 60]]}, {"name": "Vortioxetina EMS", "maker": "EMS", "cls": "Genérico", "packs": [[5, 30], [10, 30], [10, 60]]}, {"name": "Vortioxetina Eurofarma", "maker": "Eurofarma", "cls": "Genérico", "packs": [[5, 30], [15, 30], [20, 30]]}];
-const NETS=["Panvel", "São João", "Venâncio", "Raia", "Drogasil", "Drogaria São Paulo", "Pacheco"];
-const CITIES=["Vitória/ES", "São Paulo/SP", "Rio de Janeiro/RJ", "Belo Horizonte/MG", "Curitiba/PR"];
-const money=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
-const $=id=>document.getElementById(id), fm=n=>money.format(n||0), avg=(a,k)=>a.length?a.reduce((s,x)=>s+x[k],0)/a.length:0, pct=n=>(n>=0?'+':'')+n.toFixed(1).replace('.',',')+'%';
-$('today').textContent='Protótipo • '+new Date().toLocaleDateString('pt-BR');
-function h(s){let x=0;for(let i=0;i<s.length;i++)x=(x*31+s.charCodeAt(i))>>>0;return x}
-function rnd(n){let x=Math.sin(n)*10000;return x-Math.floor(x)}
-let SKUS=[];CATALOG.forEach(p=>p.packs.forEach(q=>SKUS.push({name:p.name,maker:p.maker,cls:p.cls,mg:q[0],qty:q[1],id:p.name+'|'+q[0]+'|'+q[1]})));
-const F={'Brintellix':1.06,'Vurtuoso':1,'Vognus':.73,'VOD':.78,'Voextor':.81,'Vorpro':.70,'Vorxe':.76,'Evortia':.74,'Vortioxetina Althaia':.59,'Vortioxetina Neo Química':.56,'Vortioxetina EMS':.61,'Vortioxetina Eurofarma':.63};
-const base=s=>235*Math.pow(s.mg/10,.72)*Math.pow(s.qty/30,.88)*(F[s.name]||.8);
-function obs(s,n,c,d){
-  let z=h(s.id+n+c+d), list=base(s)*(1+(rnd(z)-.5)*.10)*(1+(90-d)*.0006), d0=s.cls==='Lundbeck'?.12:s.cls==='Similar'?.15:.19, disc=d0+rnd(z+17)*.085;
-  let observed=rnd(z+91)>.045;
-  return {date:new Date(Date.now()-d*86400000),sku:s,net:n,city:c,list,final:list*(1-disc),disc:disc*100,observed}
-}
-let DATA=[];for(const s of SKUS)for(const n of NETS)for(const c of CITIES)for(let d=0;d<90;d+=7)DATA.push(obs(s,n,c,d));
-const sku=id=>SKUS.find(s=>s.id===id), pl=s=>`${s.mg} mg · ${s.qty} cp`;
-
-document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===b.dataset.v))});
-
-function productColorClass(s,side){
-  if(s.cls==='Lundbeck') return s.name==='Brintellix'?'lund':'lund2';
-  return '';
-}
-function sortForCounterpart(baseSku, currentId){
-  return [...SKUS].filter(s=>s.id!==currentId).sort((a,b)=>{
-    let ae=(a.mg===baseSku.mg&&a.qty===baseSku.qty)?0:(a.mg===baseSku.mg?1:2);
-    let be=(b.mg===baseSku.mg&&b.qty===baseSku.qty)?0:(b.mg===baseSku.mg?1:2);
-    if(ae!==be)return ae-be;
-    if(a.cls!==b.cls){
-      const ord={'Lundbeck':0,'Similar':1,'Genérico':2};
-      return ord[a.cls]-ord[b.cls];
+    function hash(text){let result=2166136261;for(let i=0;i<text.length;i++){result^=text.charCodeAt(i);result=Math.imul(result,16777619)}return result>>>0}
+    function noise(seed){return ((hash(seed)%10001)/10000)-.5}
+    function generateObservations(){
+      const selectable=CATALOG.filter(p=>!p.consolidated);
+      return selectable.flatMap(product=>{
+        const skus=product.skus?.length?product.skus:[{id:`${product.id}_DEFAULT`,shortLabel:product.presentation,originalLabel:product.originalLabel||product.presentation,quantity:product.quantity||30,unitLabel:"un",priceFactor:1}];
+        return skus.flatMap(sku=>PERIODS.flatMap((period,periodIndex)=>LOCATIONS.flatMap(location=>RETAILERS.map(retailer=>{
+          const qty=sku.quantity||30, trend=1+(product.monthly||0)*(periodIndex-(PERIODS.length-1));
+          const list=product.basePrice*(sku.priceFactor||1)*trend*location.factor*(1+retailer.offset)*(1+noise(`${sku.id}|${period}|${location.city}|${retailer.name}`)*.045);
+          const discountRate=.105+(hash(sku.id+retailer.code)%135)/1000; const available=hash(`${sku.id}|${period}|${location.city}|${retailer.name}|stock`)%100>7;
+          const final=available?list*(1-discountRate):null; const stale=hash(`${sku.id}|${location.city}|${retailer.name}|stale`)%100<8;
+          const hoursAgo=stale?80+(hash(sku.id+retailer.code)%70):1+(hash(period+sku.id+retailer.name)%28);
+          return {id:`${sku.id}|${period}|${location.city}|${retailer.code}`,productId:product.id,skuId:sku.id,brand:product.brand,period,city:location.city,uf:location.uf,cep:location.cep,network:retailer.name,networkCode:retailer.code,listPrice:+list.toFixed(2),final:Number.isFinite(final)?+final.toFixed(2):null,unitPrice:Number.isFinite(final)?+(final/qty).toFixed(4):null,discount:+(discountRate*100).toFixed(1),available,stale,hoursAgo,source:retailer.source,currency:"BRL",presentation:sku.shortLabel,originalPresentation:sku.originalLabel,quantity:sku.quantity,unitLabel:sku.unitLabel,molecule:product.molecule,market:product.market,group:product.group};
+        }))));
+      });
     }
-    return a.name.localeCompare(b.name);
-  });
-}
-function fillSelect(el, list, selected){
-  el.innerHTML=list.map(s=>`<option value="${s.id}">${s.name} — ${pl(s)} (${s.cls})</option>`).join('');
-  if(selected && list.some(s=>s.id===selected))el.value=selected;
-}
-function reSortCounterpart(changedSide){
-  let A=sku($('selA').value), B=sku($('selB').value);
-  if(!A||!B)return;
-  if(changedSide==='A'){
-    let old=B.id, list=sortForCounterpart(A,A.id); fillSelect($('selB'),list,old);
-  }else{
-    let old=A.id, list=sortForCounterpart(B,B.id); fillSelect($('selA'),list,old);
-  }
-}
-function rowsFor(s){
-  return DATA.filter(r=>r.sku.id===s.id&&r.city===$('city').value&&r.observed);
-}
-function networkStats(A,B){
-  let ra=rowsFor(A),rb=rowsFor(B);
-  return NETS.map(n=>{
-    let a=ra.filter(r=>r.net===n),b=rb.filter(r=>r.net===n);
-    let ao=a.length>0,bo=b.length>0,pa=ao?avg(a,'final'):null,pb=bo?avg(b,'final'):null,da=ao?avg(a,'disc'):null,db=bo?avg(b,'disc'):null;
-    return {n,ao,bo,pa,pb,da,db,comparable:ao&&bo,gap:(ao&&bo)?(pa/pb-1)*100:null};
-  });
-}
-function meanComparable(stats,key){
-  let a=stats.filter(x=>x.comparable).map(x=>x[key]); return a.length?a.reduce((s,x)=>s+x,0)/a.length:0;
-}
-function render(){
-  let A=sku($('selA').value),B=sku($('selB').value); if(!A||!B)return;
-  if(A.id===B.id){
-    let list=sortForCounterpart(A,A.id); fillSelect($('selB'),list,list[0]?.id); B=sku($('selB').value);
-  }
-  $('context').textContent=`${A.name} · ${pl(A)}  ×  ${B.name} · ${pl(B)}  ·  ${$('city').value}`;
+    const OBSERVATIONS=generateObservations();
+    const money=new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"});
+    const pct=new Intl.NumberFormat("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1});
+    const integer=new Intl.NumberFormat("pt-BR");
+    const $=id=>document.getElementById(id);
+    const fmtMoney=v=>Number.isFinite(v)?money.format(v):"—"; const fmtPct=v=>Number.isFinite(v)?`${v>0?"+":v<0?"−":""}${pct.format(Math.abs(v))}%`:"—"; const fmtNum=v=>Number.isFinite(v)?pct.format(v):"—";
+    const esc=value=>String(value??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));
 
-  $('fighterA').className='card fighter '+productColorClass(A,'A');
-  $('fighterB').className='card fighter '+productColorClass(B,'B');
-  let stats=networkStats(A,B), comp=stats.filter(x=>x.comparable);
-  let pa=comp.length?comp.reduce((s,x)=>s+x.pa,0)/comp.length:0, pb=comp.length?comp.reduce((s,x)=>s+x.pb,0)/comp.length:0;
-  let da=comp.length?comp.reduce((s,x)=>s+x.da,0)/comp.length:0, db=comp.length?comp.reduce((s,x)=>s+x.db,0)/comp.length:0;
-  let ua=pa/A.qty,ub=pb/B.qty,gap=pb?(pa/pb-1)*100:0,boxDiff=pa-pb,unitDiff=ua-ub,discGap=da-db;
+    const defaultState={view:"executive",mode:"demo",city:"",uf:"",cep:"",period:"2026-08",product:"",molecule:"",market:"",presentation:"",network:"",compareMode:"direct",compareProduct:"REXULTI",compareSkuA:"",compareSkuB:"",competitor:"",moleculeFilter:"all",normalization:"unit",basket:[],moleculeA:"Vortioxetina",moleculeB:"Escitalopram",duelSort:"gapDesc",hideUnavailable:true,hideIncompatible:true,hideStale:true,hideNoIntersection:true};
+    const state={...defaultState};
+    try{Object.assign(state,JSON.parse(localStorage.getItem("lundbeck-price-intelligence-v2")||"{}"))}catch(_){/* local storage opcional */}
+    function persist(){try{localStorage.setItem("lundbeck-price-intelligence-v2",JSON.stringify(state))}catch(_){}}
+    function showToast(message){const el=$("toast");el.textContent=message;el.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>el.classList.remove("show"),2600)}
+    function option(value,label,selected=false,disabled=false){return `<option value="${esc(value)}" ${selected?"selected":""} ${disabled?"disabled":""}>${esc(label)}</option>`}
 
-  $('aName').textContent=A.name;$('aMeta').textContent=`${A.maker} · ${A.cls} · ${pl(A)}`;$('aPrice').textContent=fm(pa);$('aUnit').textContent=`${fm(ua)} / comprimido`;
-  $('bName').textContent=B.name;$('bMeta').textContent=`${B.maker} · ${B.cls} · ${pl(B)}`;$('bPrice').textContent=fm(pb);$('bUnit').textContent=`${fm(ub)} / comprimido`;
-  $('gapMain').textContent=pct(gap);$('gapDirection').textContent=`${A.name} está ${Math.abs(gap).toFixed(1).replace('.',',')}% ${gap>=0?'acima':'abaixo'} de ${B.name}`;
-  $('gapBox').innerHTML=`${boxDiff>=0?'+':''}${fm(boxDiff)} por caixa<br>${unitDiff>=0?'+':''}${fm(unitDiff)} por comprimido`;
-  let diffQty=A.qty!==B.qty;$('qtyNotice').style.display=diffQty?'block':'none';$('qtyNotice').textContent=diffQty?'Apresentações com quantidades diferentes — comparação normalizada por comprimido.':'';
-
-  $('kBox').textContent=(boxDiff>=0?'+':'')+fm(boxDiff);$('kPct').textContent=pct(gap);$('kUnit').textContent=(unitDiff>=0?'+':'')+fm(unitDiff)+'/cp';$('kDisc').textContent=(discGap>=0?'+':'')+discGap.toFixed(1).replace('.',',')+' p.p.';$('kNets').textContent=comp.length;$('kNetsFoot').textContent=`de ${NETS.length} analisadas`;
-
-  let gaps=comp.map(x=>x.gap), maxGap=Math.max(...gaps),minGap=Math.min(...gaps),spread=maxGap-minGap;
-  let maxRow=[...comp].sort((a,b)=>b.gap-a.gap)[0],minRow=[...comp].sort((a,b)=>a.gap-b.gap)[0];
-  let consistency=spread<3?'Gap consistente entre redes':spread<7?'Variação moderada entre redes':'Gap heterogêneo entre redes';
-  let bestA=[...comp].sort((a,b)=>a.pa-b.pa)[0],bestB=[...comp].sort((a,b)=>a.pb-b.pb)[0],discWinner=da>db?A.name:B.name;
-
-  $('summary').innerHTML=`<strong>${A.name}</strong> apresenta preço médio <strong>${Math.abs(gap).toFixed(1).replace('.',',')}% ${gap>=0?'superior':'inferior'}</strong> a <strong>${B.name}</strong> nas ${comp.length} redes comparáveis. O gap permanece entre <strong>${minGap.toFixed(1).replace('.',',')}%</strong> e <strong>${maxGap.toFixed(1).replace('.',',')}%</strong> entre as redes, indicando ${consistency.toLowerCase()}. ${discWinner} apresenta desconto médio ${Math.abs(discGap).toFixed(1).replace('.',',')} p.p. ${da>db?'superior':'inferior'}.`;
-
-  let prices=comp.flatMap(x=>[x.pa,x.pb]),pmin=Math.min(...prices),pmax=Math.max(...prices);
-  $('networkRows').innerHTML=[...stats].sort((a,b)=>{
-    if(a.comparable&&b.comparable)return b.gap-a.gap;
-    if(a.comparable)return -1;if(b.comparable)return 1;return a.n.localeCompare(b.n);
-  }).map(x=>{
-    if(!x.comparable){
-      let msg=!x.ao&&!x.bo?'Ambos não observados':!x.ao?`${A.name} não observado nesta rede`:`${B.name} não observado nesta rede`;
-      return `<div class="netrow"><strong>${x.n}</strong><div class="missing">${msg}</div><span>—</span><span>—</span><span>—</span></div>`;
+    function fillGlobalControls(){
+      $("filterCity").innerHTML=option("","Todas as cidades")+LOCATIONS.map(x=>option(x.city,x.city,state.city===x.city)).join("");
+      $("filterUf").innerHTML=option("","Todas as UFs")+[...new Set(LOCATIONS.map(x=>x.uf))].map(x=>option(x,x,state.uf===x)).join("");
+      $("filterCep").innerHTML=option("","Todos os CEPs")+LOCATIONS.map(x=>option(x.cep,`${x.cep} · ${x.city}`,state.cep===x.cep)).join("");
+      $("filterPeriod").innerHTML=option("","Todo o período")+PERIODS.map(x=>option(x,`${MONTH_LABEL[x]} 2026`,state.period===x)).join("");
+      $("filterProduct").innerHTML=option("","Todos os produtos")+LUNDBECK_PRODUCTS.map(x=>option(x.id,x.brand,state.product===x.id)).join("");
+      $("filterMolecule").innerHTML=option("","Todas as moléculas")+[...new Set(LUNDBECK_PRODUCTS.map(x=>x.molecule).filter(Boolean))].sort().map(x=>option(x,x,state.molecule===x)).join("");
+      $("filterMarket").innerHTML=option("","Todos os mercados")+[...new Set(LUNDBECK_PRODUCTS.map(x=>x.market))].map(x=>option(x,x,state.market===x)).join("");
+      $("filterPresentation").innerHTML=option("","Todas as apresentações")+LUNDBECK_PRODUCTS.flatMap(x=>x.skus).map(x=>option(x.shortLabel,x.shortLabel,state.presentation===x.shortLabel)).join("");
+      $("filterNetwork").innerHTML=option("","Todas as redes")+RETAILERS.map(x=>option(x.name,x.name,state.network===x.name)).join("");
+      $("filterMode").value=state.mode;$("quickMode").value=state.mode;
     }
-    let aPos=(x.pa-pmin)/(pmax-pmin||1)*100,bPos=(x.pb-pmin)/(pmax-pmin||1)*100,left=Math.min(aPos,bPos),width=Math.abs(aPos-bPos);
-    return `<div class="netrow"><strong>${x.n}</strong><div class="dumb"><span class="connector" style="left:${left}%;width:${width}%"></span><span class="a" style="left:${aPos}%"></span><span class="b" style="left:${bPos}%"></span></div><span>${fm(x.pa)}</span><span>${fm(x.pb)}</span><span class="gap">${pct(x.gap)}</span></div>`;
-  }).join('');
+    function currentLundbeckProducts(){return LUNDBECK_PRODUCTS.filter(p=>(!state.product||p.id===state.product)&&(!state.molecule||p.molecule===state.molecule)&&(!state.market||p.market===state.market)&&(!state.presentation||p.skus.some(s=>s.shortLabel===state.presentation)))}
+    function filteredRows(productIds=null,includeAllPeriods=false,ignorePresentation=false){
+      if(state.mode!=="demo")return[]; const ids=productIds?new Set(productIds):null;
+      return OBSERVATIONS.filter(r=>(!ids||ids.has(r.productId))&&(!state.city||r.city===state.city)&&(!state.uf||r.uf===state.uf)&&(!state.cep||r.cep===state.cep)&&((includeAllPeriods||!state.period)||r.period===state.period)&&(!state.network||r.network===state.network)&&(ignorePresentation||!state.presentation||r.presentation===state.presentation)&&r.currency==="BRL");
+    }
+    function validRows(rows){return rows.filter(r=>r.available&&Number.isFinite(r.final))}
+    function productMetrics(product){
+      const rows=filteredRows([product.id]),valid=validRows(rows),prevPeriod=state.period?PERIODS[Math.max(0,PERIODS.indexOf(state.period)-1)]:PERIODS[PERIODS.length-2];
+      const prev=validRows(OBSERVATIONS.filter(r=>r.productId===product.id&&r.period===prevPeriod&&(!state.city||r.city===state.city)&&(!state.network||r.network===state.network)&&(!state.presentation||r.presentation===state.presentation)));
+      const avg=calc.mean(valid,"final"),unit=calc.mean(valid,"unitPrice"),prevAvg=calc.mean(prev,"final"); const networks=new Set(valid.map(r=>r.network)).size;
+      return {product,rows,valid,avg,min:calc.min(valid,"final"),max:calc.max(valid,"final"),unit,month:calc.month(unit),monthly:calc.monthly(avg,prevAvg),coverage:networks/RETAILERS.length*100,dispersion:calc.dispersion(valid,"final"),fresh:rows.length?rows.filter(r=>!r.stale).length/rows.length*100:0,networks};
+    }
+    function skuMetrics(product,sku){const rows=filteredRows([product.id]).filter(r=>r.skuId===sku.id),valid=validRows(rows);return {sku,rows,valid,avg:calc.mean(valid,"final"),min:calc.min(valid,"final"),max:calc.max(valid,"final"),unit:calc.mean(valid,"unitPrice"),networks:new Set(valid.map(r=>r.network)).size}}
+    function groupCatalog(product){return COMPETITOR_CATALOG.filter(p=>p.group===product.group&&!p.consolidated&&p.brand!==product.id)}
+    function productGap(product){
+      if(!product.group)return null; const marketIds=groupCatalog(product).filter(p=>p.type!=="Lundbeck"||p.brand!==product.id).map(p=>p.id); const pRows=validRows(filteredRows([product.id])); const basketRows=validRows(filteredRows(marketIds));
+      const pUnit=calc.mean(pRows,"unitPrice"),bUnit=calc.mean(basketRows,"unitPrice");return calc.gapPct(pUnit,bUnit);
+    }
 
-  $('insights').innerHTML=`
-    <div class="insight att"><strong>Maior gap</strong><br>${maxRow.n} · ${pct(maxRow.gap)}</div>
-    <div class="insight"><strong>Menor gap</strong><br>${minRow.n} · ${pct(minRow.gap)}</div>
-    <div class="insight"><strong>Spread do gap</strong><br>${spread.toFixed(1).replace('.',',')} p.p.</div>
-    <div class="insight op"><strong>Menor preço de A</strong><br>${bestA.n} · ${fm(bestA.pa)}</div>
-    <div class="insight op"><strong>Menor preço de B</strong><br>${bestB.n} · ${fm(bestB.pb)}</div>
-    <div class="insight"><strong>Maior desconto médio</strong><br>${discWinner}</div>
-    <div class="insight"><strong>Leitura</strong><br>${consistency}</div>`;
+    function renderExecutive(){
+      const products=currentLundbeckProducts(),metrics=products.map(productMetrics);const allValid=validRows(filteredRows(products.map(p=>p.id)));const gaps=products.map(productGap).filter(Number.isFinite);const stale=filteredRows(products.map(p=>p.id)).filter(r=>r.stale).length;
+      const avgMonthly=calc.mean(metrics,"monthly"),avgGap=gaps.length?gaps.reduce((a,b)=>a+b,0)/gaps.length:null,networkCount=new Set(allValid.map(r=>r.network)).size,fresh=filteredRows(products.map(p=>p.id)).length?filteredRows(products.map(p=>p.id)).filter(r=>!r.stale).length/filteredRows(products.map(p=>p.id)).length*100:null;
+      const kpis=[
+        ["Produtos monitorados",integer.format(products.length),"de 7 marcas Lundbeck","Portfólio"],["Preço médio do portfólio",fmtMoney(calc.mean(allValid,"final")),"preço final demonstrativo","BRL"],
+        ["Variação média mensal",fmtPct(avgMonthly),"versus período anterior",avgMonthly>0?"Alta":"Movimento"],["Gap médio competitivo",fmtPct(avgGap),"somente grupos configurados","Preço unitário"],
+        ["Cobertura de redes",`${networkCount} / ${RETAILERS.length}`,"redes com oferta válida","Cobertura"],["Observações atualizadas",Number.isFinite(fresh)?fmtNum(fresh)+"%":"—",`${stale} leituras vencidas`,"Atualização"],
+        ["Alertas",integer.format(stale+products.filter(p=>!p.quantity).length),"atualização + cadastro","Qualidade"],["Última atualização","13 ago 2026","geração demonstrativa local","16:30 BRT"]
+      ];
+      $("kpiGrid").innerHTML=kpis.map(k=>`<article class="card kpi"><div class="kpi-top"><span class="eyebrow">${esc(k[0])}</span><span class="delta">${esc(k[3])}</span></div><div class="kpi-value">${esc(k[1])}</div><div class="kpi-foot">${esc(k[2])}</div></article>`).join("");
+      $("portfolioCount").textContent=`${products.length} produto${products.length===1?"":"s"} · ${products.reduce((sum,p)=>sum+p.skus.filter(s=>!state.presentation||s.shortLabel===state.presentation).length,0)} SKUs`;
+      $("productGrid").innerHTML=metrics.map(m=>{const gap=productGap(m.product),skus=m.product.skus.filter(s=>!state.presentation||s.shortLabel===state.presentation),skuRows=skus.map(sku=>{const s=skuMetrics(m.product,sku);return `<div class="sku-row"><div><div class="sku-name">${esc(sku.shortLabel)}</div><div class="sku-meta">${s.networks} redes · ${esc(sku.form)}</div></div><div class="sku-price"><strong>${fmtMoney(s.avg)}</strong><small>${fmtMoney(s.min)} — ${fmtMoney(s.max)} · ${fmtMoney(s.unit)}/${esc(sku.unitLabel)}</small></div></div>`}).join("");return `<article class="card product-card"><div class="product-head"><div><span class="eyebrow">${esc(m.product.market)}</span><div class="product-name">${esc(m.product.brand)}</div><div class="product-meta">${esc(m.product.molecule||"Molécula não informada")} · ${skus.length} SKU${skus.length===1?"":"s"} no recorte</div></div><span class="chip ${m.product.compare?"brand":"neutral"}">${m.product.compare?"Comparável":"Acompanhamento"}</span></div><div class="product-price">${fmtMoney(m.avg)}</div><div class="product-range">Média das apresentações · faixa ${fmtMoney(m.min)} — ${fmtMoney(m.max)}</div><div class="sku-list"><div class="sku-list-head"><span>Apresentação</span><span>Preço médio · faixa observada</span></div>${skuRows}</div><div class="mini-metrics"><div class="mini-metric"><span>Preço unitário médio</span><strong>${fmtMoney(m.unit)}</strong></div><div class="mini-metric"><span>Cobertura</span><strong>${fmtNum(m.coverage)}%</strong></div><div class="mini-metric"><span>Variação mensal</span><strong>${fmtPct(m.monthly)}</strong></div><div class="mini-metric"><span>${m.product.group?"Gap mercado":"Redes"}</span><strong>${m.product.group?fmtPct(gap):m.networks}</strong></div></div><div class="card-footer"><span class="update"><i></i>${fmtNum(m.fresh)}% atualizadas · ${m.networks} redes</span>${m.product.compare?`<button class="button small" data-analyze="${m.product.id}">Analisar produto</button>`:""}</div></article>`}).join("")||`<article class="card method-card"><strong>Nenhum produto no recorte</strong><p>Ajuste os filtros globais para visualizar o portfólio.</p></article>`;
+      document.querySelectorAll("[data-analyze]").forEach(btn=>btn.onclick=()=>{state.compareProduct=btn.dataset.analyze;state.view="comparator";renderAll();showToast(`${LUNDBECK_PRODUCTS.find(p=>p.id===state.compareProduct).brand} aberto no comparador.`)});
+      renderInsights(metrics);renderExecutiveCharts(metrics);
+    }
+    function renderInsights(metrics){
+      const available=metrics.filter(m=>Number.isFinite(m.monthly)),high=[...available].sort((a,b)=>b.monthly-a.monthly)[0],low=[...available].sort((a,b)=>a.monthly-b.monthly)[0],disp=[...metrics].sort((a,b)=>(b.dispersion||0)-(a.dispersion||0))[0],coverage=[...metrics].sort((a,b)=>a.coverage-b.coverage)[0];
+      const gaps=metrics.map(m=>({m,gap:productGap(m.product)})).filter(x=>Number.isFinite(x.gap)).sort((a,b)=>b.gap-a.gap);const cityStats=LOCATIONS.map(l=>({city:l.city,avg:calc.mean(validRows(OBSERVATIONS.filter(r=>metrics.some(m=>m.product.id===r.productId)&&r.city===l.city&&(!state.period||r.period===state.period))),"final")})).filter(x=>Number.isFinite(x.avg)).sort((a,b)=>a.avg-b.avg);
+      const insights=[
+        ["Maior aumento",high?`${high.product.brand} · ${fmtPct(high.monthly)}`:"Sem base comparável"],["Maior redução",low?`${low.product.brand} · ${fmtPct(low.monthly)}`:"Sem base comparável"],
+        ["Maior dispersão",disp?`${disp.product.brand} · ${fmtNum(disp.dispersion)}%`:"Sem observações"],["Maior gap",gaps[0]?`${gaps[0].m.product.brand} · ${fmtPct(gaps[0].gap)}`:"Sem grupo competitivo"],
+        ["Menor cobertura",coverage?`${coverage.product.brand} · ${fmtNum(coverage.coverage)}%`:"Sem observações"],["Cidade com menor média",cityStats[0]?`${cityStats[0].city} · ${fmtMoney(cityStats[0].avg)}`:"Sem observações"],
+        ["Requer atualização",`${metrics.reduce((sum,m)=>sum+m.rows.filter(r=>r.stale).length,0)} observações vencidas`],["Escopo do insight",`${metrics.length} produtos · ${validRows(filteredRows(metrics.map(m=>m.product.id))).length} observações válidas`]
+      ];
+      $("insightGrid").innerHTML=insights.map(x=>`<div class="insight"><span>${esc(x[0])}</span><strong>${esc(x[1])}</strong></div>`).join("");
+    }
+    function renderExecutiveCharts(metrics){
+      const labels=metrics.map(m=>m.product.brand),colors=labels.map((_,i)=>i<4?"#5b338a":"#9b8dae");
+      drawBar($("rankingChart"),labels,metrics.map(m=>m.avg||0),colors,{money:true,sort:true});
+      const allPeriods=PERIODS.map(period=>metrics.map(m=>calc.mean(validRows(OBSERVATIONS.filter(r=>r.productId===m.product.id&&r.period===period&&(!state.city||r.city===state.city)&&(!state.presentation||r.presentation===state.presentation))),"final")));const lines=metrics.slice(0,5).map((m,index)=>({label:m.product.brand,color:["#5b338a","#16756f","#326b9d","#c47a26","#8b4f67"][index],values:PERIODS.map((_,pi)=>allPeriods[pi][metrics.indexOf(m)]||0)}));drawLine($("trendChart"),PERIODS.map(p=>MONTH_LABEL[p]),lines,{money:true});$("trendLegend").innerHTML=lines.map(l=>`<span><i style="background:${l.color}"></i>${esc(l.label)}</span>`).join("");
+      drawBar($("movementChart"),labels,metrics.map(m=>m.monthly||0),metrics.map(m=>(m.monthly||0)>=0?"#b77822":"#12736c"),{percent:true});drawBar($("dispersionChart"),labels,metrics.map(m=>m.dispersion||0),"#7d65a4",{percent:true});drawBar($("coverageProductChart"),labels,metrics.map(m=>m.coverage||0),"#16756f",{percent:true,max:100});
+      const cityValues=LOCATIONS.map(l=>{const rows=filteredRows(metrics.map(m=>m.product.id)).filter(r=>r.city===l.city);return rows.length?validRows(rows).length/rows.length*100:0});drawBar($("coverageCityChart"),LOCATIONS.map(l=>l.city),cityValues,"#326b9d",{percent:true,max:100});
+      const gaps=metrics.filter(m=>m.product.group).map(m=>productGap(m.product)||0);drawBar($("gapChart"),metrics.filter(m=>m.product.group).map(m=>m.product.brand),gaps,gaps.map(v=>v>0?"#b5474f":"#12736c"),{percent:true});
+      const basketMetrics=metrics.filter(m=>m.product.group).flatMap(m=>{const g=groupCatalog(m.product).filter(x=>x.type!=="Lundbeck").map(x=>x.id);return[{label:m.product.brand,value:m.unit||0,color:"#5b338a"},{label:`Cesta ${m.product.brand}`,value:calc.mean(validRows(filteredRows(g)),"unitPrice")||0,color:"#b5a8c8"}]});drawBar($("basketChart"),basketMetrics.map(x=>x.label),basketMetrics.map(x=>x.value),basketMetrics.map(x=>x.color),{money:true});
+    }
 
-  $('promoAName').textContent=A.name;$('promoBName').textContent=B.name;$('promoAVal').textContent=da.toFixed(1).replace('.',',')+'%';$('promoBVal').textContent=db.toFixed(1).replace('.',',')+'%';
-  let dmax=Math.max(da,db,1);$('promoABar').style.width=(da/dmax*100)+'%';$('promoBBar').style.width=(db/dmax*100)+'%';
-  $('promoText').innerHTML=`<strong>${da>db?A.name:B.name}</strong> aplica ${Math.abs(discGap).toFixed(1).replace('.',',')} p.p. ${Math.max(da,db)===da?'mais':'mais'} desconto que ${da>db?B.name:A.name}.`;
+    function selectableCompetitors(product){let list=groupCatalog(product);if(state.moleculeFilter!=="all")list=list.filter(p=>p.molecule===state.moleculeFilter);return list}
+    function fillComparator(){
+      const products=LUNDBECK_PRODUCTS.filter(p=>p.compare);$("compareLundbeck").innerHTML=products.map(p=>option(p.id,p.brand,state.compareProduct===p.id)).join("");const product=products.find(p=>p.id===state.compareProduct)||products[0];state.compareProduct=product.id;const market=competitorMarkets[product.group];$("marketBadge").textContent=market.name;
+      const molecules=[...new Set(groupCatalog(product).map(p=>p.molecule).filter(Boolean))];$("moleculeFilters").innerHTML=[`<button class="filter-pill ${state.moleculeFilter==="all"?"active":""}" data-molecule-filter="all">Todos</button>`,...molecules.map(m=>`<button class="filter-pill ${state.moleculeFilter===m?"active":""}" data-molecule-filter="${esc(m)}">${esc(m)}</button>`),`<button class="filter-pill ${state.moleculeFilter==="unknown"?"active":""}" data-molecule-filter="unknown">Molécula pendente</button>`].join("");
+      document.querySelectorAll("[data-molecule-filter]").forEach(btn=>btn.onclick=()=>{state.moleculeFilter=btn.dataset.moleculeFilter;renderAll()});
+      let competitors=selectableCompetitors(product);if(state.moleculeFilter==="unknown")competitors=groupCatalog(product).filter(p=>!p.molecule);if(!competitors.some(p=>p.id===state.competitor))state.competitor=competitors[0]?.id||"";
+      $("compareCompetitor").innerHTML=competitors.map(p=>option(p.id,`${p.originalLabel}${p.molecule?` · ${p.molecule}`:" · molécula pendente"}`,state.competitor===p.id)).join("")||option("","Nenhum produto neste filtro",true,true);
+      if(!product.skus.some(s=>s.id===state.compareSkuA))state.compareSkuA=product.skus[0].id;$("comparePresentationA").innerHTML=product.skus.map(s=>option(s.id,s.shortLabel,state.compareSkuA===s.id)).join("");const competitor=CATALOG.find(p=>p.id===state.competitor);state.compareSkuB=competitor?`${competitor.id}_DEFAULT`:"";$("comparePresentationB").innerHTML=option(state.compareSkuB,competitor?.presentation||"Selecione um concorrente",true,!competitor);$("normalization").value=state.normalization;$("moleculeA").value=state.moleculeA;$("moleculeB").value=state.moleculeB;
+      const moleculeAllowed=product.group==="n06_sri";document.querySelector('[data-compare-mode="molecule"]').disabled=!moleculeAllowed;if(!moleculeAllowed&&state.compareMode==="molecule")state.compareMode="direct";
+      document.querySelectorAll("[data-compare-mode]").forEach(btn=>btn.classList.toggle("active",btn.dataset.compareMode===state.compareMode));document.querySelectorAll(".molecule-control").forEach(el=>el.hidden=state.compareMode!=="molecule");document.querySelectorAll(".direct-control").forEach(el=>el.hidden=state.compareMode==="molecule"||state.compareMode==="basket");
+      $("basketPanel").classList.toggle("show",state.compareMode!=="direct");$("moleculeNotice").hidden=state.compareMode!=="molecule";
+      renderBasketChecks(product);renderComparison(product,competitor);
+    }
+    function renderBasketChecks(product){
+      let candidates=groupCatalog(product);let title="Produtos incluídos na cesta competitiva";
+      if(state.compareMode==="molecule"){candidates=groupCatalog(product).filter(p=>p.molecule===state.moleculeA||p.molecule===state.moleculeB);title="Marcas incluídas nas cestas por molécula"}
+      if(!state.basket.length||!state.basket.some(id=>candidates.some(p=>p.id===id)))state.basket=candidates.filter(p=>p.molecule||state.compareMode!=="molecule").slice(0,8).map(p=>p.id);
+      $("basketTitle").textContent=title;$("basketCount").textContent=`${state.basket.filter(id=>candidates.some(p=>p.id===id)).length} selecionados`;
+      $("basketChecks").innerHTML=candidates.map(p=>`<label class="check-item"><input type="checkbox" value="${esc(p.id)}" ${state.basket.includes(p.id)?"checked":""}><span>${esc(p.brand)}</span><small>${esc(p.molecule||"pendente")}</small></label>`).join("")||`<span class="chip warn">Nenhuma marca com molécula validada neste recorte</span>`;
+      $("basketChecks").querySelectorAll("input").forEach(input=>input.onchange=()=>{state.basket=[...$("basketChecks").querySelectorAll("input:checked")].map(x=>x.value);renderComparison(LUNDBECK_PRODUCTS.find(p=>p.id===state.compareProduct),CATALOG.find(p=>p.id===state.competitor));persist()});
+    }
+    function rowKey(r){return `${r.period}|${r.city}|${r.network}|${r.currency}`}
+    function intersect(leftRows,rightRows){const right=new Map(rightRows.map(r=>[rowKey(r),r]));return leftRows.map(l=>({left:l,right:right.get(rowKey(l))})).filter(x=>x.right)}
+    function aggregateByKey(rows,label){const groups=new Map();rows.forEach(r=>{const key=rowKey(r);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(r)});return [...groups.values()].map(items=>({id:`basket|${rowKey(items[0])}`,brand:label,period:items[0].period,city:items[0].city,uf:items[0].uf,cep:items[0].cep,network:items[0].network,currency:items[0].currency,listPrice:calc.mean(items,"listPrice"),final:calc.mean(validRows(items),"final"),unitPrice:calc.mean(validRows(items),"unitPrice"),discount:calc.mean(items,"discount"),available:validRows(items).length>0,stale:items.every(x=>x.stale),hoursAgo:Math.max(...items.map(x=>x.hoursAgo)),source:"Cesta demonstrativa",quantity:null,items:items.length}));}
+    function comparisonData(product,competitor){
+      const selectedSku=product.skus.find(s=>s.id===state.compareSkuA)||product.skus[0],productRows=filteredRows([product.id],false,true).filter(r=>r.skuId===selectedSku.id);
+      if(state.compareMode==="direct"){const right=competitor?filteredRows([competitor.id],false,true).filter(r=>!state.compareSkuB||r.skuId===state.compareSkuB):[];return {leftLabel:selectedSku.shortLabel,rightLabel:competitor?.brand||"Sem concorrente",leftRows:productRows,rightRows:right,pairs:intersect(productRows,right),included:competitor?[competitor.brand]:[],excluded:[]}}
+      if(state.compareMode==="basket"){const selected=groupCatalog(product).filter(p=>state.basket.includes(p.id));const excluded=groupCatalog(product).filter(p=>!state.basket.includes(p.id));const right=aggregateByKey(filteredRows(selected.map(p=>p.id),false,true),"Cesta competitiva");return {leftLabel:selectedSku.shortLabel,rightLabel:"Cesta competitiva",leftRows:productRows,rightRows:right,pairs:intersect(productRows,right),included:selected.map(p=>p.brand),excluded:excluded.map(p=>p.brand)}}
+      const all=groupCatalog(product);const selectedA=all.filter(p=>p.molecule===state.moleculeA&&state.basket.includes(p.id));const selectedB=all.filter(p=>p.molecule===state.moleculeB&&state.basket.includes(p.id));const left=aggregateByKey(filteredRows(selectedA.map(p=>p.id),false,true),`Cesta ${state.moleculeA}`),right=aggregateByKey(filteredRows(selectedB.map(p=>p.id),false,true),`Cesta ${state.moleculeB}`);return {leftLabel:`Cesta ${state.moleculeA}`,rightLabel:`Cesta ${state.moleculeB}`,leftRows:left,rightRows:right,pairs:intersect(left,right),included:[...selectedA,...selectedB].map(p=>p.brand),excluded:all.filter(p=>(p.molecule===state.moleculeA||p.molecule===state.moleculeB)&&!state.basket.includes(p.id)).map(p=>p.brand)};
+    }
+    function renderComparison(product,competitor){
+      const data=comparisonData(product,competitor);let pairs=data.pairs;
+      if(state.hideUnavailable)pairs=pairs.filter(p=>p.left.available&&p.right.available);if(state.hideStale)pairs=pairs.filter(p=>!p.left.stale&&!p.right.stale);
+      const left=validRows(pairs.map(p=>p.left)),right=validRows(pairs.map(p=>p.right));const avgL=calc.mean(left,"final"),avgR=calc.mean(right,"final"),unitL=calc.mean(left,"unitPrice"),unitR=calc.mean(right,"unitPrice"),monthL=calc.month(unitL),monthR=calc.month(unitR);const primary=state.normalization==="box"?[avgL,avgR,"caixa"]:state.normalization==="month"?[monthL,monthR,"30 dias"]:[unitL,unitR,"unidade"];const gapP=calc.gapPct(primary[0],primary[1]),gapM=calc.gapMoney(primary[0],primary[1]);
+      const statsL=calc.basket(left),statsR=calc.basket(right),discountL=calc.mean(left,"discount"),discountR=calc.mean(right,"discount");
+      $("compareContext").textContent=`${data.leftLabel} × ${data.rightLabel} · ${competitorMarkets[product.group].name} · ${pairs.length} interseções válidas`;
+      const selectedSku=product.skus.find(s=>s.id===state.compareSkuA)||product.skus[0];$("normalizationNotice").hidden=state.compareMode==="direct"&&selectedSku.quantity===competitor?.quantity;
+      $("duelGrid").innerHTML=`<article class="card duel-card"><span class="eyebrow">${state.compareMode==="molecule"?"Cesta A":"Produto Lundbeck / lado A"}</span><h3>${esc(data.leftLabel)}</h3><div class="duel-meta">${left.length} observações · ${new Set(left.map(r=>r.network)).size} redes</div><div class="duel-price">${fmtMoney(primary[0])}</div><div class="duel-unit">${fmtMoney(avgL)} / caixa · ${fmtMoney(unitL)} / unidade · ${fmtMoney(monthL)} / 30 dias</div></article><article class="card gap-card"><span class="eyebrow">Gap por ${esc(primary[2])}</span><div class="gap-value">${fmtPct(gapP)}</div><p>${esc(data.leftLabel)} está ${Number.isFinite(gapP)?`${fmtNum(Math.abs(gapP))}% ${gapP>=0?"acima":"abaixo"}`:"sem base comparável"} de ${esc(data.rightLabel)}.</p></article><article class="card duel-card right"><span class="eyebrow">${state.compareMode==="direct"?"Concorrente":"Cesta / lado B"}</span><h3>${esc(data.rightLabel)}</h3><div class="duel-meta">${right.length} observações · ${new Set(right.map(r=>r.network)).size} redes</div><div class="duel-price">${fmtMoney(primary[1])}</div><div class="duel-unit">${fmtMoney(avgR)} / caixa · ${fmtMoney(unitR)} / unidade · ${fmtMoney(monthR)} / 30 dias</div></article>`;
+      const metrics=[["Gap em reais",fmtMoney(gapM)],["Gap percentual",fmtPct(gapP)],["Diferença desconto",Number.isFinite(discountL)&&Number.isFinite(discountR)?`${fmtNum(discountL-discountR)} p.p.`:"—"],["Redes comparáveis",`${new Set(pairs.map(p=>p.left.network)).size}`],["Mediana da cesta B",fmtMoney(statsR.median)],["Faixa da cesta B",`${fmtMoney(statsR.min)} — ${fmtMoney(statsR.max)}`]];$("metricStrip").innerHTML=metrics.map(x=>`<div class="metric"><span>${esc(x[0])}</span><strong>${esc(x[1])}</strong></div>`).join("");
+      $("duelSubtitle").textContent=`Incluídos: ${data.included.length||1} produto(s) · Excluídos: ${data.excluded.length} · ${pairs.length} observações comparáveis · média ${fmtMoney(statsR.mean)}, mediana ${fmtMoney(statsR.median)}.`;renderDuelRows(pairs,data);
+    }
+    function renderDuelRows(pairs,data){
+      let rows=pairs.map(p=>{const leftValue=state.normalization==="box"?p.left.final:state.normalization==="month"?calc.month(p.left.unitPrice):p.left.unitPrice;const rightValue=state.normalization==="box"?p.right.final:state.normalization==="month"?calc.month(p.right.unitPrice):p.right.unitPrice;return {...p,leftValue,rightValue,gapMoney:calc.gapMoney(leftValue,rightValue),gapPct:calc.gapPct(leftValue,rightValue)}});
+      const sorters={gapDesc:(a,b)=>(b.gapPct||0)-(a.gapPct||0),gapAsc:(a,b)=>(a.gapPct||0)-(b.gapPct||0),leftPrice:(a,b)=>(a.leftValue||Infinity)-(b.leftValue||Infinity),rightPrice:(a,b)=>(a.rightValue||Infinity)-(b.rightValue||Infinity),discount:(a,b)=>Math.max(b.left.discount,b.right.discount)-Math.max(a.left.discount,a.right.discount),recent:(a,b)=>Math.max(a.left.hoursAgo,a.right.hoursAgo)-Math.max(b.left.hoursAgo,b.right.hoursAgo)};rows.sort(sorters[state.duelSort]||sorters.gapDesc);
+      $("duelRows").innerHTML=rows.map(p=>`<tr><td class="network">${esc(p.left.network)}</td><td class="table-price"><strong>${fmtMoney(p.left.final)}</strong><small>Lista ${fmtMoney(p.left.listPrice)} · ${fmtMoney(p.left.unitPrice)}/un · −${fmtNum(p.left.discount)}%</small></td><td class="table-price"><strong>${fmtMoney(p.right.final)}</strong><small>Lista ${fmtMoney(p.right.listPrice)} · ${fmtMoney(p.right.unitPrice)}/un · −${fmtNum(p.right.discount)}%</small></td><td><strong>${fmtMoney(p.gapMoney)}</strong></td><td><strong>${fmtPct(p.gapPct)}</strong></td><td><span class="stock ${(p.left.stale||p.right.stale)?"low":""}">${p.left.available&&p.right.available?"Disponível":"Indisponível"}</span></td><td>${esc(p.left.city)} / ${esc(p.left.cep)}</td><td>${esc(p.left.source)}</td><td>há ${Math.max(p.left.hoursAgo,p.right.hoursAgo)}h</td></tr>`).join("")||`<tr><td colspan="9">Nenhuma interseção válida para os filtros atuais.</td></tr>`;
+    }
 
-  let seenA=stats.filter(x=>x.ao).length,seenB=stats.filter(x=>x.bo).length,seenBoth=comp.length;
-  $('covA').textContent=seenA;$('covATxt').textContent=`redes com ${A.name}`;$('covB').textContent=seenB;$('covBTxt').textContent=`redes com ${B.name}`;$('covBoth').textContent=seenBoth;$('covBothTxt').textContent=`redes comparáveis de ${NETS.length}`;
+    function renderQuality(){
+      const rawCount=CATALOG.length,skuCount=LUNDBECK_PRODUCTS.reduce((sum,p)=>sum+p.skus.length,0),missingMolecule=CATALOG.filter(p=>!p.molecule&&!p.consolidated).length,incomplete=COMPETITOR_CATALOG.filter(p=>!p.consolidated).length,duplicateEAN=0,duplicates=CATALOG.filter((p,i,a)=>a.findIndex(x=>x.group===p.group&&x.originalLabel&&x.originalLabel===p.originalLabel)<i).length,stale=OBSERVATIONS.filter(r=>r.stale).length,available=OBSERVATIONS.filter(r=>r.available).length;const completeness=(1-(missingMolecule+incomplete)/(rawCount*2))*100,quality=Math.max(0,Math.round(completeness*.55+available/OBSERVATIONS.length*25+(1-stale/OBSERVATIONS.length)*20));
+      $("qualityScore").textContent=`${quality}%`;$("qualityStatus").innerHTML=[["Modo","Demonstrativo"],["Registros de produto",integer.format(rawCount)],["SKUs Lundbeck",integer.format(skuCount)],["Observações geradas",integer.format(OBSERVATIONS.length)],["Última atualização","13 ago 2026 · 16:30 BRT"]].map(x=>`<div class="status-row"><span>${esc(x[0])}</span><strong>${esc(x[1])}</strong></div>`).join("");
+      const audits=[["SKUs Lundbeck",skuCount,"Apresentações fornecidas e preservadas"],["Observações válidas",available,"Preço final e disponibilidade presentes"],["Redes monitoradas",RETAILERS.length,"Fontes demonstrativas configuradas"],["Cidades cobertas",LOCATIONS.length,"CEP disponível em todas as cidades"]];$("auditGrid").innerHTML=audits.map(x=>`<article class="card audit"><span class="eyebrow">${esc(x[0])}</span><strong>${integer.format(x[1])}</strong><p>${esc(x[2])}</p></article>`).join("");
+      const issues=[["Produtos sem princípio ativo",missingMolecule,"Bloqueados nos filtros de molécula até validação"],["Apresentações incompletas",incomplete,"Campos demonstrativos ou não validados"],["EAN duplicado",duplicateEAN,"Nenhum EAN foi fornecido; não há colisão detectável"],["Duplicidades exatas na fonte",duplicates,"Removidas apenas da interface e dos cálculos"],["Observações vencidas",stale,"Leituras demonstrativas acima de 72 horas"],["Agrupamentos consolidados",1,"BRINTELLIX + VURTUOSO não é selecionável como apresentação"]];$("issueList").innerHTML=issues.map(x=>`<div class="issue"><div><strong>${esc(x[0])}</strong><p>${esc(x[2])}</p></div><span class="issue-count">${integer.format(x[1])}</span></div>`).join("");
+      const sources=[["Briefing recebido","Define os sete produtos, os grupos e os códigos de laboratório exatamente como informados."],["Protótipo legado","Origina a experiência de duelo por rede, histórico, exportação e o cadastro demonstrativo de vortioxetina."],["Normalização local","Espaços, acentos e caixa são normalizados em campo separado; o rótulo original permanece intacto."],["Gerador demonstrativo","Cria preços sintéticos identificados como demonstração; não substitui uma fonte real nem validada."]];$("sourceList").innerHTML=sources.map(x=>`<div class="source-row"><div><strong>${esc(x[0])}</strong><p>${esc(x[1])}</p></div><span class="chip good">Rastreado</span></div>`).join("");
+      const fields=[["Identificador","Chave estável normalizada"],["Marca","Original + versão normalizada"],["Princípio ativo","Nulo quando não validado"],["Laboratório","Código preservado do briefing"],["Dosagem e quantidade","Separadas para normalização"],["Forma farmacêutica","Campo estruturado"],["EAN","Aceita nulo e valida duplicidade"],["Mercado e grupo","Vínculo centralizado"],["Tipo","Lundbeck, referência, similar ou genérico"],["Status","Ativo, inativo ou agrupamento"],["Origem","Fonte e transformação rastreadas"],["Observação","Preço, local, rede e horário"]];$("dataDictionary").innerHTML=fields.map(x=>`<div class="dictionary-item"><strong>${esc(x[0])}</strong><span>${esc(x[1])}</span></div>`).join("");
+    }
 
-  let hist=[gap-1.5,gap-0.9,gap-0.4,gap].map(x=>x.toFixed(1).replace('.',',')+'%');
-  $('history').innerHTML=`Últimos períodos: <strong>${hist.join(' → ')}</strong><br><span class="small">Estrutura pronta para substituir esta simulação por histórico real de gap quando a base persistente estiver conectada.</span>`;
-}
-function fillA(selected){
-  let B=sku($('selB').value)||SKUS[0]; let list=sortForCounterpart(B,B.id); fillSelect($('selA'),list,selected);
-}
-function fillB(selected){
-  let A=sku($('selA').value)||SKUS[0]; let list=sortForCounterpart(A,A.id); fillSelect($('selB'),list,selected);
-}
-$('selA').onchange=()=>{reSortCounterpart('A');render()};
-$('selB').onchange=()=>{reSortCounterpart('B');render()};
-$('city').onchange=render;
-$('swap').onclick=()=>{let a=$('selA').value,b=$('selB').value;fillSelect($('selA'),sortForCounterpart(sku(b),b),b);fillSelect($('selB'),sortForCounterpart(sku(a),a),a);render()};
+    function drawBar(canvas,labels,values,colors,options={}){
+      if(!canvas||!canvas.clientWidth)return;const dpr=Math.min(devicePixelRatio||1,2),w=canvas.clientWidth,h=canvas.clientHeight;canvas.width=w*dpr;canvas.height=h*dpr;const c=canvas.getContext("2d");c.scale(dpr,dpr);c.clearRect(0,0,w,h);let entries=labels.map((label,i)=>({label,value:Number.isFinite(values[i])?values[i]:0,color:Array.isArray(colors)?colors[i]:colors}));if(options.sort)entries.sort((a,b)=>b.value-a.value);const pad={l:45,r:12,t:12,b:46},pw=w-pad.l-pad.r,ph=h-pad.t-pad.b;const min=Math.min(0,...entries.map(x=>x.value)),max=options.max||Math.max(1,...entries.map(x=>x.value)),range=Math.max(1,max-min);c.font='8px "Segoe UI"';c.fillStyle="#777b87";c.strokeStyle="#e7e4df";c.textBaseline="middle";for(let i=0;i<4;i++){const y=pad.t+ph*i/3;c.beginPath();c.moveTo(pad.l,y);c.lineTo(w-pad.r,y);c.stroke();const v=max-range*i/3;c.textAlign="right";c.fillText(options.money?fmtMoney(v):options.percent?`${fmtNum(v)}%`:fmtNum(v),pad.l-6,y)}const slot=pw/Math.max(1,entries.length),bar=Math.max(5,Math.min(36,slot*.58)),zeroY=pad.t+(max/range)*ph;entries.forEach((x,i)=>{const px=pad.l+i*slot+(slot-bar)/2,py=pad.t+(max-x.value)/range*ph,height=Math.max(1,Math.abs(zeroY-py));c.fillStyle=x.color||"#5b338a";c.fillRect(px,x.value>=0?py:zeroY,bar,height);c.save();c.translate(px+bar/2,h-7);c.rotate(entries.length>5?-.55:0);c.textAlign=entries.length>5?"right":"center";c.fillStyle="#737785";c.fillText(x.label.length>18?x.label.slice(0,17)+"…":x.label,0,0);c.restore()})
+    }
+    function drawLine(canvas,labels,lines,options={}){
+      if(!canvas||!canvas.clientWidth)return;const dpr=Math.min(devicePixelRatio||1,2),w=canvas.clientWidth,h=canvas.clientHeight;canvas.width=w*dpr;canvas.height=h*dpr;const c=canvas.getContext("2d");c.scale(dpr,dpr);c.clearRect(0,0,w,h);const vals=lines.flatMap(l=>l.values).filter(Number.isFinite);if(!vals.length){c.font='10px "Segoe UI"';c.fillStyle="#777b87";c.textAlign="center";c.fillText("Sem dados para o recorte",w/2,h/2);return}const minRaw=Math.min(...vals),maxRaw=Math.max(...vals),spread=Math.max(1,maxRaw-minRaw),min=minRaw-spread*.12,max=maxRaw+spread*.12,pad={l:48,r:12,t:12,b:28},pw=w-pad.l-pad.r,ph=h-pad.t-pad.b;c.font='8px "Segoe UI"';c.strokeStyle="#e7e4df";c.fillStyle="#777b87";for(let i=0;i<4;i++){const y=pad.t+ph*i/3;c.beginPath();c.moveTo(pad.l,y);c.lineTo(w-pad.r,y);c.stroke();c.textAlign="right";c.fillText(options.money?fmtMoney(max-(max-min)*i/3):fmtNum(max-(max-min)*i/3),pad.l-6,y)}labels.forEach((label,i)=>{c.textAlign="center";c.fillText(label,pad.l+pw*i/Math.max(1,labels.length-1),h-8)});lines.forEach(line=>{c.strokeStyle=line.color;c.lineWidth=2.2;c.lineJoin="round";c.beginPath();line.values.forEach((v,i)=>{const x=pad.l+pw*i/Math.max(1,labels.length-1),y=pad.t+(max-v)/(max-min)*ph;i?c.lineTo(x,y):c.moveTo(x,y)});c.stroke()})
+    }
 
-$('catToggle').onclick=()=>{let open=$('catBody').classList.toggle('open');$('catToggle').querySelector('h3').textContent=(open?'▾':'▸')+' Catálogo de apresentações';$('catToggle').querySelector('button').textContent=open?'Recolher':'Expandir'};
-$('catTable').innerHTML=SKUS.map(s=>`<tr><td><strong>${s.name}</strong></td><td>${s.maker}</td><td>${s.cls}</td><td>${pl(s)}</td><td><div class="catalogAction"><button data-a="${s.id}">Comparar como A</button><button data-b="${s.id}">Comparar como B</button></div></td></tr>`).join('');
-document.querySelectorAll('[data-a]').forEach(b=>b.onclick=e=>{let id=e.target.dataset.a;if(id===$('selB').value){let alt=sortForCounterpart(sku(id),id)[0];fillSelect($('selB'),sortForCounterpart(sku(id),id),alt.id)}fillSelect($('selA'),sortForCounterpart(sku($('selB').value),$('selB').value),id);reSortCounterpart('A');render();window.scrollTo({top:0,behavior:'smooth'})});
-document.querySelectorAll('[data-b]').forEach(b=>b.onclick=e=>{let id=e.target.dataset.b;if(id===$('selA').value){let alt=sortForCounterpart(sku(id),id)[0];fillSelect($('selA'),sortForCounterpart(sku(id),id),alt.id)}fillSelect($('selB'),sortForCounterpart(sku($('selA').value),$('selA').value),id);reSortCounterpart('B');render();window.scrollTo({top:0,behavior:'smooth'})});
+    const VIEW_COPY={executive:["Inteligência de Preços — Portfólio Lundbeck","Visão executiva e posicionamento competitivo de preços"],comparator:["Comparador de Preços","Produto, cesta competitiva e molécula — com normalização explícita"],quality:["Qualidade dos Dados","Completude, rastreabilidade e atualização da base"]};
+    function setView(view){state.view=view;document.querySelectorAll(".view").forEach(x=>x.classList.toggle("active",x.id===view));document.querySelectorAll("[data-view]").forEach(x=>x.classList.toggle("active",x.dataset.view===view));$("pageTitle").textContent=VIEW_COPY[view][0];$("pageSubtitle").textContent=VIEW_COPY[view][1];persist();window.scrollTo({top:0,behavior:"smooth"});if(view==="executive")requestAnimationFrame(()=>renderExecutive())}
+    function setMode(mode){state.mode=mode;document.body.classList.toggle("real-mode",mode==="real");$("quickMode").value=mode;$("filterMode").value=mode;$("sideMode").textContent=mode==="real"?"Modo Real":"Modo Demonstrativo";$("sideModeText").textContent=mode==="real"?"Nenhuma base real foi anexada; os indicadores permanecem ocultos.":"Valores sintéticos para validar fluxos, cálculos e experiência. Não representam preços de mercado.";$("dataNotice").style.display=mode==="real"?"none":"flex";persist()}
+    function renderFilterSummary(){const parts=[state.city,state.uf,state.cep,state.period?`${MONTH_LABEL[state.period]} 2026`:"",LUNDBECK_PRODUCTS.find(p=>p.id===state.product)?.brand,state.molecule,state.market,state.presentation,state.network].filter(Boolean);$("filterSummary").textContent=parts.length?parts.join(" · "):"Todos os recortes demonstrativos"}
+    function renderAll(){fillGlobalControls();renderFilterSummary();renderExecutive();fillComparator();renderQuality();setView(state.view in VIEW_COPY?state.view:"executive");setMode(state.mode);persist()}
 
-let defA=SKUS.find(s=>s.name==='Vurtuoso'&&s.mg===10&&s.qty===30);
-let defB=SKUS.find(s=>s.name==='Voextor'&&s.mg===10&&s.qty===30);
-fillSelect($('selA'),SKUS,defA.id);fillSelect($('selB'),sortForCounterpart(defA,defA.id),defB.id);
-render();
-</script>
-</body></html>
+    document.querySelectorAll("[data-view]").forEach(btn=>btn.addEventListener("click",()=>setView(btn.dataset.view)));
+    document.querySelectorAll("[data-compare-mode]").forEach(btn=>btn.addEventListener("click",()=>{if(btn.disabled)return;state.compareMode=btn.dataset.compareMode;state.basket=[];fillComparator();persist()}));
+    const globalMap={filterCity:"city",filterUf:"uf",filterCep:"cep",filterPeriod:"period",filterProduct:"product",filterMolecule:"molecule",filterMarket:"market",filterPresentation:"presentation",filterNetwork:"network"};Object.entries(globalMap).forEach(([id,key])=>$(id).addEventListener("change",e=>{state[key]=e.target.value;if(key==="city"){const loc=LOCATIONS.find(x=>x.city===state.city);if(loc){state.uf=loc.uf;state.cep=loc.cep}}renderAll()}));
+    $("filterMode").addEventListener("change",e=>{setMode(e.target.value);if(state.mode==="demo")renderAll()});$("quickMode").addEventListener("change",e=>{setMode(e.target.value);if(state.mode==="demo")renderAll()});
+    $("clearFilters").addEventListener("click",()=>{Object.assign(state,{city:"",uf:"",cep:"",period:"2026-08",product:"",molecule:"",market:"",presentation:"",network:""});renderAll();showToast("Filtros restaurados.")});
+    $("compareLundbeck").addEventListener("change",e=>{state.compareProduct=e.target.value;state.compareSkuA="";state.competitor="";state.moleculeFilter="all";state.basket=[];fillComparator();persist()});$("compareCompetitor").addEventListener("change",e=>{state.competitor=e.target.value;fillComparator();persist()});$("comparePresentationA").addEventListener("change",e=>{state.compareSkuA=e.target.value;fillComparator();persist()});$("normalization").addEventListener("change",e=>{state.normalization=e.target.value;fillComparator();persist()});
+    $("moleculeA").addEventListener("change",e=>{state.moleculeA=e.target.value;if(state.moleculeA===state.moleculeB)state.moleculeB=state.moleculeA==="Vortioxetina"?"Escitalopram":"Vortioxetina";state.basket=[];fillComparator()});$("moleculeB").addEventListener("change",e=>{state.moleculeB=e.target.value;if(state.moleculeA===state.moleculeB)state.moleculeA=state.moleculeB==="Vortioxetina"?"Escitalopram":"Vortioxetina";state.basket=[];fillComparator()});
+    $("duelSort").addEventListener("change",e=>{state.duelSort=e.target.value;fillComparator()});["hideUnavailable","hideIncompatible","hideStale","hideNoIntersection"].forEach(id=>{$(id).checked=state[id];$(id).addEventListener("change",e=>{state[id]=e.target.checked;fillComparator()})});
+    $("exportButton").addEventListener("click",()=>{if(state.mode!=="demo"){showToast("Nenhuma base real disponível para exportação.");return}const rows=filteredRows(currentLundbeckProducts().map(p=>p.id));const csvRows=[["produto","apresentacao","periodo","cidade","uf","cep","rede","preco_lista","preco_final","preco_unitario","desconto_pct","disponivel","origem","modo"],...rows.map(r=>[r.brand,r.presentation,r.period,r.city,r.uf,r.cep,r.network,r.listPrice,r.final??"",r.unitPrice??"",r.discount,r.available?"sim":"não",r.source,"Demonstrativo"])];const csv="\ufeff"+csvRows.map(row=>row.map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(";")).join("\r\n");const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));const a=document.createElement("a");a.href=url;a.download="inteligencia-precos-lundbeck-demonstrativo.csv";a.click();URL.revokeObjectURL(url);showToast("Recorte demonstrativo exportado em CSV.")});
+    $("shareButton").addEventListener("click",async()=>{const ms=currentLundbeckProducts().map(productMetrics),text=`Inteligência de Preços — Portfólio Lundbeck: ${ms.length} produtos no recorte, preço médio demonstrativo ${fmtMoney(calc.mean(validRows(filteredRows(ms.map(m=>m.product.id))),"final"))}. Análise exclusivamente econômica; sem equivalência terapêutica.`;try{await navigator.clipboard.writeText(text);showToast("Resumo copiado.")}catch(_){showToast("Não foi possível copiar automaticamente.")}});
+    let resizeTimer;window.addEventListener("resize",()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(state.view==="executive")renderExecutive()},120)});
+    renderAll();
+  </script>
+</body>
+</html>
